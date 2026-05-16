@@ -142,22 +142,14 @@ nav.scrolled{box-shadow:var(--shadow)}
 ═══════════════════════════════════════════ */
 .landing {
   min-height: 100vh;
-  background: linear-gradient(160deg, #050f1e 0%, #071a35 30%, #0d3460 60%, #1565a7 85%, #2e86c1 100%);
+  background: #050f1e; /* fallback while photos load */
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   position: relative; overflow: hidden;
   padding: 80px 5% 120px;
   text-align: center;
 }
-.landing::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 70% 55% at 15% 35%, rgba(93,173,226,.1) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 40% at 85% 70%, rgba(201,168,76,.07) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 30% at 50% 10%, rgba(174,214,241,.06) 0%, transparent 55%);
-  pointer-events: none;
-}
+.landing::before { display:none; } /* replaced by .landing-overlay */
 .landing-bubbles { position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0; }
 .bubble { position:absolute;border-radius:50%;background:rgba(93,173,226,.1);animation:rise linear infinite; }
 @keyframes rise{0%{transform:translateY(110%) scale(1);opacity:0}10%{opacity:1}90%{opacity:.4}100%{transform:translateY(-20vh) scale(1.4);opacity:0}}
@@ -669,7 +661,45 @@ footer{background:var(--deep);color:rgba(255,255,255,.6);padding:60px 5% 40px}
   .logo-bar-label{font-size:.6rem}
 }
 /* ═══════════════════════════════════════════
-   LOGO BAR — elegant sticky footer
+   HERO PHOTO SLIDESHOW
+═══════════════════════════════════════════ */
+.landing-slides{
+  position:absolute;inset:0;z-index:0;overflow:hidden;
+}
+.landing-slide{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;background-repeat:no-repeat;
+  opacity:0;transition:opacity 1.6s ease-in-out;
+  transform:scale(1.04);animation:kenBurns 8s ease-in-out infinite alternate;
+}
+.landing-slide.active{opacity:1}
+@keyframes kenBurns{
+  from{transform:scale(1.04) translate(0,0)}
+  to{transform:scale(1.0) translate(-1%,-.5%)}
+}
+/* Dark gradient overlay — keeps text legible over any photo */
+.landing-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:
+    linear-gradient(160deg,
+      rgba(5,15,30,.88) 0%,
+      rgba(7,26,53,.80) 30%,
+      rgba(13,52,96,.72) 60%,
+      rgba(21,101,167,.65) 85%,
+      rgba(46,134,193,.60) 100%),
+    radial-gradient(ellipse 70% 55% at 15% 35%,rgba(93,173,226,.12) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 40% at 85% 70%,rgba(201,168,76,.08) 0%,transparent 60%);
+}
+/* Photo counter indicator dots at bottom of landing */
+.slide-indicators{
+  position:absolute;bottom:88px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;z-index:3;
+}
+.slide-dot{
+  width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.3);
+  transition:background .4s,transform .4s;cursor:pointer;
+}
+.slide-dot.active{background:rgba(255,255,255,.85);transform:scale(1.4)}
 ═══════════════════════════════════════════ */
 .logo-bar {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 1200;
@@ -803,7 +833,6 @@ body { padding-bottom: 58px; }
 <button id="navSearchBtn" class="nav-search-btn" title="Arama (Ctrl+K)">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
   </button>
-  <button id="loginBtn">🔑 Giriş</button>
   <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
 </nav>
 
@@ -822,6 +851,10 @@ body { padding-bottom: 58px; }
      LANDING PAGE
 ══════════════════════════════════ -->
 <section class="landing" id="ana-sayfa">
+  <!-- Photo slides (populated by JS from Firebase) -->
+  <div class="landing-slides" id="landingSlides"></div>
+  <!-- Dark gradient overlay — always present for text legibility -->
+  <div class="landing-overlay"></div>
   <div class="landing-bubbles" id="bubbles"></div>
   <div class="landing-content">
 
@@ -890,6 +923,8 @@ body { padding-bottom: 58px; }
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     Kaydır
   </div>
+  <!-- Photo indicator dots -->
+  <div class="slide-indicators" id="slideIndicators"></div>
 
   <svg class="landing-waves" viewBox="0 0 1440 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
     <path d="M0,80 C240,160 480,0 720,80 C960,160 1200,0 1440,80 L1440,160 L0,160 Z" fill="#f8f5f0"/>
@@ -1264,7 +1299,10 @@ if(auth){
     const bar=document.getElementById('adminBar');
     const lbtn=document.getElementById('loginBtn');
     bar.style.display=user?'flex':'none';
-    lbtn.style.display=user?'none':'flex';
+    
+    // Eski buton kaldırıldığı için hata vermemesi adına güvenli kontrol ekledik:
+    if(lbtn) lbtn.style.display=user?'none':'flex';
+    
     document.getElementById('mainNav').classList.toggle('has-bar',!!user);
     document.getElementById('mobileMenu').style.top=user?'106px':'66px';
     if(user){
@@ -1305,7 +1343,10 @@ document.getElementById('logoutBtn').addEventListener('click',async()=>{await si
 /* ── ALBUM SYSTEM ─────────────────────────────────── */
 // Load albums
 if(db){
-  onValue(ref(db,'albums'),snap=>{renderAlbums(snap.val());});
+  onValue(ref(db,'albums'),snap=>{
+    renderAlbums(snap.val());
+    updateHeroSlideshow(snap.val());
+  });
   // Load other sections
   ['videos','podcasts','presentations','works','news','team', 'timeline'].forEach(sec=>{
     onValue(ref(db,`content/${sec}`),snap=>{renderSection(sec,snap.val());});
@@ -1378,6 +1419,74 @@ const delB=`<button class="del-btn" onclick="event.stopPropagation();window._del
 
 window._curAlbumKey=null;
 window._curAlbumPhotos=[];
+
+/* ── Hero Slideshow ───────────────────────────────── */
+let _slideTimer=null;
+let _slideIdx=0;
+
+function updateHeroSlideshow(data){
+  // Collect up to 12 photos across all albums, shuffle for variety
+  const urls=[];
+  if(data){
+    Object.values(data).forEach(album=>{
+      if(album.photos){
+        Object.values(album.photos).forEach(p=>{
+          if(p.url)urls.push(p.url);
+        });
+      }
+    });
+  }
+
+  const container=document.getElementById('landingSlides');
+  const indicators=document.getElementById('slideIndicators');
+  if(!container||!indicators)return;
+
+  // Shuffle
+  for(let i=urls.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [urls[i],urls[j]]=[urls[j],urls[i]];
+  }
+  const pool=urls.slice(0,12); // max 12
+
+  if(!pool.length){
+    // No photos yet — keep dark gradient fallback, hide indicators
+    container.innerHTML='';
+    indicators.innerHTML='';
+    return;
+  }
+
+  // Build slide elements
+  container.innerHTML=pool.map((url,i)=>
+    `<div class="landing-slide${i===0?' active':''}"
+         style="background-image:url('${url.replace(/'/g,"\\'")}')"></div>`
+  ).join('');
+
+  // Build indicator dots
+  indicators.innerHTML=pool.map((_,i)=>
+    `<div class="slide-dot${i===0?' active':''}" data-idx="${i}"></div>`
+  ).join('');
+
+  // Dot click navigation
+  indicators.querySelectorAll('.slide-dot').forEach(dot=>{
+    dot.addEventListener('click',()=>goToSlide(parseInt(dot.dataset.idx)));
+  });
+
+  // Start auto-rotation
+  if(_slideTimer)clearInterval(_slideTimer);
+  _slideIdx=0;
+  _slideTimer=setInterval(()=>goToSlide((_slideIdx+1)%pool.length), 5000);
+}
+
+function goToSlide(idx){
+  const slides=document.querySelectorAll('.landing-slide');
+  const dots=document.querySelectorAll('.slide-dot');
+  if(!slides.length)return;
+  slides[_slideIdx].classList.remove('active');
+  if(dots[_slideIdx])dots[_slideIdx].classList.remove('active');
+  _slideIdx=idx;
+  slides[_slideIdx].classList.add('active');
+  if(dots[_slideIdx])dots[_slideIdx].classList.add('active');
+}
 
 function openAlbum(key,album){
   window._curAlbumKey=key;
@@ -1613,7 +1722,13 @@ function renderSection(sec,data){
   if(empty)empty.style.display=hasData?'none':'';
   if(!hasData)return;
 
-  Object.entries(data).reverse().forEach(([key, item], idx) => {
+  let entries = Object.entries(data);
+  // Zaman çizelgesi hariç tüm içerikleri en yeni en üste gelecek şekilde ters çevir
+  if (sec !== 'timeline') {
+    entries = entries.reverse();
+  }
+
+  entries.forEach(([key, item], idx) => {
     const ab=adminBtns(sec,key);
     const el=document.createElement('div');
     switch(sec){
@@ -1820,7 +1935,22 @@ document.getElementById('hamburger').addEventListener('click',()=>document.getEl
 function closeMobile(){document.getElementById('mobileMenu').classList.remove('open')}
 
 /* Login modal */
-document.getElementById('loginBtn').addEventListener('click',()=>document.getElementById('loginModal').classList.add('open'));
+/* ── GİZLİ ADMİN GİRİŞ MEKANİZMASI ──────────────── */
+const openLoginModal = () => document.getElementById('loginModal').classList.add('open');
+
+// 1. Sol üstteki logoya çift tıklandığında paneli aç
+const navIcon = document.querySelector('.nav-brand .nav-icon');
+if(navIcon) {
+  navIcon.addEventListener('dblclick', openLoginModal);
+}
+
+// 2. Klavye kısayolu (Ctrl + Shift + L) basıldığında paneli aç
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
+    e.preventDefault();
+    openLoginModal();
+  }
+});
 document.getElementById('closeLoginBtn').addEventListener('click',()=>{document.getElementById('loginModal').classList.remove('open');document.getElementById('loginError').textContent='';});
 document.getElementById('loginModal').addEventListener('click',e=>{if(e.target===document.getElementById('loginModal')){document.getElementById('loginModal').classList.remove('open');document.getElementById('loginError').textContent='';}});
 
