@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Erdemli Nesiller — Mavi Ufuklar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root{
+  --deep:#071629; --navy:#0d3460; --ocean:#1565a7; --mid:#2e86c1;
+  --sky:#5dade2; --foam:#aed6f1; --mist:#d6eaf8; --sand:#f8f5f0;
+  --white:#ffffff; --gold:#c9a84c; --gold-light:#f0d98a;
+  --text:#1a2a3a; --subtle:#6b8cad; --danger:#e53935;
+  --radius:14px; --radius-lg:22px;
+  --shadow:0 6px 32px rgba(10,31,60,.09);
+  --shadow-lg:0 20px 60px rgba(10,31,60,.18);
+  --transition:.25s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--text);overflow-x:hidden}
+
+/* ═══════════════════════════════════════════
+   ADMIN BAR
+═══════════════════════════════════════════ */
+#adminBar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:2000;
+  background:var(--deep);color:var(--foam);
+  padding:0 5%;height:40px;align-items:center;justify-content:space-between;font-size:.78rem;
+  border-bottom:1px solid rgba(93,173,226,.15);
+}
+#adminBar .al{display:flex;align-items:center;gap:8px}
+#adminBar .dot{width:7px;height:7px;border-radius:50%;background:#4caf50;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(76,175,80,.4)}50%{box-shadow:0 0 0 6px rgba(76,175,80,0)}}
+.logout-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:var(--foam);padding:5px 16px;border-radius:100px;font-size:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background var(--transition)}
+.logout-btn:hover{background:rgba(255,255,255,.18)}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+nav{
+  position:fixed;left:0;right:0;z-index:1000;top:0;
+  background:rgba(248,245,240,.94);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(46,134,193,.1);
+  padding:0 5%;display:flex;align-items:center;justify-content:space-between;
+  height:66px;transition:box-shadow var(--transition),top var(--transition);
+}
+nav.has-bar{top:40px}
+nav.scrolled{box-shadow:var(--shadow)}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
+.nav-logo-wrap{display:flex;flex-direction:column;align-items:flex-start}
+.nav-super{font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ocean);opacity:.8;line-height:1;margin-bottom:2px}
+.nav-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--navy);line-height:1}
+.nav-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--navy),var(--ocean));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 2px 10px rgba(13,52,96,.25)}
+.nav-links{display:flex;gap:1px;list-style:none}
+.nav-links a{display:block;padding:7px 10px;border-radius:8px;text-decoration:none;color:var(--text);font-size:.78rem;font-weight:500;transition:background var(--transition),color var(--transition);white-space:nowrap}
+.nav-links a:hover,.nav-links a.active{background:var(--mist);color:var(--ocean)}
+#loginBtn{display:flex;align-items:center;gap:6px;background:var(--ocean);color:white;border:none;border-radius:100px;padding:7px 18px;font-size:.79rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background var(--transition);flex-shrink:0}
+#loginBtn:hover{background:var(--navy)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;border:none;background:none}
+.hamburger span{display:block;width:22px;height:2px;background:var(--navy);border-radius:2px;transition:var(--transition)}
+.mobile-menu{display:none;position:fixed;left:0;right:0;z-index:999;background:var(--sand);border-bottom:1px solid var(--mist);padding:16px 5% 24px;top:66px;box-shadow:var(--shadow)}
+.mobile-menu.open{display:block}
+.mobile-menu a{display:block;padding:13px 0;border-bottom:1px solid var(--mist);text-decoration:none;color:var(--text);font-size:.9rem;font-weight:500}
+
+/* ═══════════════════════════════════════════
+   LANDING PAGE
+═══════════════════════════════════════════ */
+.landing {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #050f1e 0%, #071a35 30%, #0d3460 60%, #1565a7 85%, #2e86c1 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  padding: 80px 5% 120px;
+  text-align: center;
+}
+.landing::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 15% 35%, rgba(93,173,226,.1) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 85% 70%, rgba(201,168,76,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 50% 10%, rgba(174,214,241,.06) 0%, transparent 55%);
+  pointer-events: none;
+}
+.landing-bubbles { position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0; }
+.bubble { position:absolute;border-radius:50%;background:rgba(93,173,226,.1);animation:rise linear infinite; }
+@keyframes rise{0%{transform:translateY(110%) scale(1);opacity:0}10%{opacity:1}90%{opacity:.4}100%{transform:translateY(-20vh) scale(1.4);opacity:0}}
+
+.landing-content { position:relative;z-index:2;max-width:900px;width:100%; }
+
+/* Top org badges */
+.landing-orgs {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+  margin-bottom: 52px;
+  animation: fadeUp .8s ease both;
+}
+.org-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14);
+  border-radius: 100px; padding: 7px 16px;
+  color: rgba(255,255,255,.65); font-size: .73rem; letter-spacing: .04em;
+  text-decoration: none; transition: background var(--transition), border-color var(--transition);
+}
+.org-badge:hover { background: rgba(255,255,255,.13); border-color: rgba(255,255,255,.3); color: white; }
+.org-badge img { width: 20px; height: 20px; border-radius: 4px; object-fit: contain; background: white; padding: 1px; }
+
+/* Project hierarchy */
+.landing-super {
+  font-size: .68rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--gold-light); font-weight: 500; margin-bottom: 14px; opacity: .85;
+  animation: fadeUp .8s .1s ease both;
+}
+.landing-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-weight: 300; line-height: .95; color: var(--white);
+  letter-spacing: -.02em; margin-bottom: 0;
+  animation: fadeUp .8s .15s ease both;
+}
+.landing-title strong { font-weight: 600; }
+
+/* Animated wave separator */
+.landing-wave-sep {
+  display: flex; align-items: center; justify-content: center; gap: 18px;
+  margin: 32px auto; max-width: 420px;
+  animation: fadeUp .8s .2s ease both;
+}
+.landing-wave-sep::before, .landing-wave-sep::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(174,214,241,.35), transparent);
+}
+.landing-wave-label {
+  font-size: .67rem; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(255,255,255,.38); white-space: nowrap; display: flex; align-items: center; gap: 8px;
+}
+
+/* Sub-project card */
+.landing-subproject {
+  display: inline-flex; align-items: stretch; gap: 0;
+  background: linear-gradient(135deg, rgba(21,101,167,.45), rgba(93,173,226,.2));
+  border: 1px solid rgba(93,173,226,.3);
+  border-radius: 20px; overflow: hidden; margin-bottom: 40px;
+  animation: fadeUp .8s .25s ease both;
+  backdrop-filter: blur(8px);
+}
+.landing-subproject-left {
+  padding: 22px 28px; text-align: left; border-right: 1px solid rgba(174,214,241,.2);
+}
+.landing-subproject-eyebrow {
+  font-size: .62rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--foam); opacity: .65; margin-bottom: 6px; display: block;
+}
+.landing-subproject-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+  font-weight: 300; font-style: italic; color: var(--white); line-height: 1;
+}
+.landing-subproject-right {
+  padding: 22px 28px; text-align: left; display: flex; flex-direction: column; justify-content: center;
+}
+.landing-subproject-theme {
+  font-size: .8rem; color: var(--foam); opacity: .85; line-height: 1.65; margin-bottom: 8px;
+}
+.landing-subproject-year {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .7rem; color: rgba(255,255,255,.45); letter-spacing: .06em;
+}
+.landing-subproject-year::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+
+/* Welcome message */
+.landing-welcome {
+  max-width: 580px; margin: 0 auto 44px;
+  font-size: clamp(.88rem, 1.5vw, 1rem); color: rgba(255,255,255,.55);
+  line-height: 1.85; font-style: italic; font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  animation: fadeUp .8s .3s ease both;
+}
+
+/* CTA */
+.landing-cta {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+  animation: fadeUp .8s .35s ease both;
+}
+.btn-landing-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--white); color: var(--navy);
+  padding: 15px 34px; border-radius: 100px;
+  font-size: .92rem; font-weight: 600; text-decoration: none;
+  transition: transform var(--transition), box-shadow var(--transition);
+  box-shadow: 0 6px 28px rgba(0,0,0,.25); letter-spacing: .01em;
+}
+.btn-landing-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,.35); }
+.btn-landing-primary svg { transition: transform var(--transition); }
+.btn-landing-primary:hover svg { transform: translateY(3px); }
+.btn-landing-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1.5px solid rgba(255,255,255,.38); color: rgba(255,255,255,.8);
+  padding: 14px 28px; border-radius: 100px; font-size: .9rem; text-decoration: none;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+.btn-landing-outline:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.6); color: white; }
+
+/* Bottom scroll cue */
+.landing-scroll {
+  position: absolute; bottom: 44px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: rgba(255,255,255,.3); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+  animation: bounce 2.4s ease-in-out infinite; z-index: 2;
+}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
+.landing-waves { position:absolute;bottom:0;left:0;right:0;height:160px; }
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* Shared CTAs used on main site */
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--white);color:var(--navy);padding:13px 28px;border-radius:100px;font-size:.88rem;font-weight:500;text-decoration:none;transition:transform var(--transition),box-shadow var(--transition);box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;border:1.5px solid rgba(255,255,255,.45);color:var(--white);padding:12px 28px;border-radius:100px;font-size:.88rem;text-decoration:none;transition:background var(--transition),border-color var(--transition)}
+.btn-outline:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.7)}
+
+/* ═══════════════════════════════════════════
+   SECTIONS SHARED
+═══════════════════════════════════════════ */
+section{padding:90px 5%}
+.section-header{text-align:center;margin-bottom:56px}
+.section-eyebrow{display:inline-block;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ocean);margin-bottom:12px;padding:4px 14px;background:var(--mist);border-radius:100px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,4vw,2.9rem);font-weight:400;color:var(--deep);line-height:1.2;margin-bottom:14px}
+.section-desc{max-width:560px;margin:0 auto;color:var(--subtle);font-size:.93rem;line-height:1.78}
+.section-divider{width:44px;height:3px;margin:16px auto 0;background:linear-gradient(90deg,var(--sky),var(--foam));border-radius:2px}
+
+/* ═══════════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════════ */
+#hakkinda{background:var(--white)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;max-width:1100px;margin:0 auto}
+.about-text h3{font-family:'Cormorant Garamond',serif;font-size:1.85rem;font-weight:400;color:var(--navy);margin-bottom:18px;line-height:1.3}
+.about-text p{color:var(--subtle);line-height:1.88;font-size:.92rem;margin-bottom:16px}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
+.stat-card{background:var(--mist);border-radius:var(--radius);padding:20px;text-align:center}
+.stat-number{font-family:'Cormorant Garamond',serif;font-size:2.3rem;font-weight:600;color:var(--ocean);line-height:1}
+.stat-label{font-size:.76rem;color:var(--subtle);margin-top:5px}
+.about-visual{position:relative}
+.about-visual-card{background:linear-gradient(135deg,var(--ocean),var(--deep));border-radius:var(--radius-lg);padding:42px 36px;color:white;box-shadow:var(--shadow-lg)}
+.about-visual-card h4{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:300;font-style:italic;margin-bottom:20px;color:var(--foam)}
+.theme-list{list-style:none;display:flex;flex-direction:column;gap:11px}
+.theme-list li{display:flex;align-items:center;gap:12px;font-size:.87rem;color:rgba(255,255,255,.85)}
+.theme-list li::before{content:'';display:block;width:7px;height:7px;border-radius:50%;background:var(--sky);flex-shrink:0}
+.about-badge{position:absolute;bottom:-16px;right:-16px;background:var(--gold);color:var(--deep);padding:13px 17px;border-radius:13px;font-size:.76rem;font-weight:600;box-shadow:var(--shadow);text-align:center;max-width:138px;line-height:1.4}
+
+/* ═══════════════════════════════════════════
+   GALLERY — ALBUM SYSTEM
+═══════════════════════════════════════════ */
+#galeri{background:var(--sand)}
+
+/* Album grid (main view) */
+.album-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;max-width:1200px;margin:0 auto}
+
+.album-card{
+  background:var(--white);border-radius:var(--radius-lg);overflow:hidden;
+  box-shadow:var(--shadow);transition:transform var(--transition),box-shadow var(--transition);
+  cursor:pointer;position:relative;
+}
+.album-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+
+/* cover — mosaic of up to 4 photos */
+.album-cover{width:100%;aspect-ratio:4/3;background:var(--mist);position:relative;overflow:hidden;display:grid}
+.album-cover.count-1{grid-template-columns:1fr}
+.album-cover.count-2{grid-template-columns:1fr 1fr}
+.album-cover.count-3{grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr}
+.album-cover.count-3 .ac-img:first-child{grid-row:1/3}
+.album-cover.count-4,.album-cover.count-many{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.ac-img{overflow:hidden;position:relative}
+.ac-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+.album-card:hover .ac-img img{transform:scale(1.04)}
+.album-cover-empty{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:var(--subtle);font-size:.82rem;width:100%;height:100%}
+.album-more-badge{position:absolute;bottom:8px;right:8px;background:rgba(10,31,60,.72);backdrop-filter:blur(4px);color:white;font-size:.76rem;font-weight:600;padding:4px 10px;border-radius:100px}
+
+.album-info{padding:18px 20px 20px}
+.album-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--navy);margin-bottom:4px}
+.album-meta-row{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.album-date{font-size:.75rem;color:var(--subtle)}
+.album-count{font-size:.75rem;color:var(--ocean);font-weight:500;background:var(--mist);padding:3px 10px;border-radius:100px}
+.album-desc{font-size:.8rem;color:var(--subtle);margin-top:6px;line-height:1.55}
+
+/* Album detail view (inside album) */
+.album-detail{display:none;max-width:1200px;margin:0 auto}
+.album-detail.active{display:block}
+.album-detail-header{display:flex;align-items:center;gap:16px;margin-bottom:36px;flex-wrap:wrap}
+.back-btn{display:inline-flex;align-items:center;gap:7px;background:var(--white);border:1.5px solid var(--mist);border-radius:100px;padding:8px 18px;font-size:.82rem;color:var(--ocean);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:background var(--transition),border-color var(--transition)}
+.back-btn:hover{background:var(--mist);border-color:var(--sky)}
+.album-detail-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:400;color:var(--deep)}
+.album-detail-sub{font-size:.82rem;color:var(--subtle);margin-left:auto}
+
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.photo-thumb{border-radius:12px;overflow:hidden;aspect-ratio:4/3;cursor:pointer;position:relative;box-shadow:var(--shadow)}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
+.photo-thumb:hover img{transform:scale(1.06)}
+.photo-del{display:none;position:absolute;top:7px;right:7px;z-index:5;background:var(--danger);color:white;border:none;border-radius:50%;width:24px;height:24px;font-size:.72rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.photo-del:hover{transform:scale(1.1)}
+.photo-thumb:hover .photo-del{display:flex}
+
+/* Both views share this for admin add-slot */
+.album-grid .add-slot{min-height:220px}
+
+/* ═══════════════════════════════════════════
+   MEDIA SECTIONS
+═══════════════════════════════════════════ */
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;max-width:1200px;margin:0 auto}
+.media-card{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform var(--transition),box-shadow var(--transition);background:var(--white);position:relative}
+.media-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.embed-wrapper{width:100%;aspect-ratio:16/9;background:var(--deep);display:flex;align-items:center;justify-content:center}
+.embed-wrapper iframe{width:100%;height:100%;border:none;display:block}
+.embed-placeholder{display:flex;flex-direction:column;align-items:center;gap:12px;color:rgba(255,255,255,.25);font-size:.82rem}
+
+/* YouTube thumbnail card — replaces broken iframe embed */
+.yt-card{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;cursor:pointer;display:block;background:var(--deep)}
+.yt-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+.yt-card:hover img{transform:scale(1.04)}
+.yt-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);transition:background .25s}
+.yt-card:hover .yt-play{background:rgba(0,0,0,.15)}
+.yt-play-btn{width:64px;height:64px;background:#ff0000;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,.4);transition:transform .25s,box-shadow .25s}
+.yt-card:hover .yt-play-btn{transform:scale(1.1);box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.yt-play-btn svg{margin-left:4px}
+.media-info{padding:18px 20px}
+.media-title{font-weight:500;font-size:.9rem;color:var(--text);margin-bottom:4px}
+.media-sub{font-size:.78rem;color:var(--subtle)}
+
+#podcastler{background:var(--sand)}
+.podcast-list{display:flex;flex-direction:column;gap:20px;max-width:800px;margin:0 auto}
+.podcast-card{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);position:relative}
+.podcast-embed iframe{width:100%;border:none;display:block;min-height:80px}
+.podcast-info{padding:18px 22px;border-top:1px solid var(--mist)}
+.podcast-title{font-weight:500;color:var(--text);font-size:.9rem}
+.podcast-desc{font-size:.8rem;color:var(--subtle);margin-top:4px;line-height:1.6}
+
+#calismalar{background:var(--mist)}
+.works-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;max-width:1200px;margin:0 auto}
+.work-card{background:var(--white);border-radius:var(--radius);padding:26px 24px;box-shadow:var(--shadow);transition:transform var(--transition),box-shadow var(--transition);border-left:4px solid var(--sky);position:relative}
+.work-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.work-type{display:inline-block;font-size:.69rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ocean);background:var(--mist);padding:3px 10px;border-radius:100px;margin-bottom:12px}
+.work-title{font-weight:500;font-size:.92rem;color:var(--text);margin-bottom:8px}
+.work-author{font-size:.78rem;color:var(--subtle)}
+.work-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:.8rem;color:var(--ocean);text-decoration:none;font-weight:500;transition:gap var(--transition);background:none;border:none;padding:0;cursor:pointer;font-family:'DM Sans',sans-serif}
+.work-link:hover{gap:10px}
+
+#haberler{background:var(--white)}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;max-width:1200px;margin:0 auto}
+.news-card{background:var(--sand);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform var(--transition),box-shadow var(--transition);position:relative}
+.news-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.news-img{width:100%;height:160px;background:linear-gradient(135deg,var(--ocean),var(--sky));display:flex;align-items:center;justify-content:center;font-size:3rem;color:rgba(255,255,255,.3)}
+.news-body{padding:22px}
+.news-date{font-size:.73rem;color:var(--subtle);margin-bottom:8px;letter-spacing:.03em}
+.news-title{font-family:'Cormorant Garamond',serif;font-size:1.18rem;color:var(--navy);font-weight:600;line-height:1.35;margin-bottom:10px}
+.news-excerpt{font-size:.81rem;color:var(--subtle);line-height:1.72}
+
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:22px;max-width:1100px;margin:0 auto}
+.team-card{background:var(--sand);border-radius:var(--radius);padding:28px 20px;text-align:center;box-shadow:var(--shadow);transition:transform var(--transition),box-shadow var(--transition);position:relative}
+.team-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg)}
+.team-avatar{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--ocean),var(--sky));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:white;font-weight:300;margin:0 auto 16px;overflow:hidden}
+.team-avatar img{width:100%;height:100%;object-fit:cover}
+.team-name{font-weight:500;font-size:.91rem;color:var(--text);margin-bottom:4px}
+.team-role{font-size:.77rem;color:var(--subtle);font-style:italic}
+.team-role-badge{display:inline-block;margin-top:10px;font-size:.67rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:100px;font-weight:600}
+.badge-teacher{background:var(--mist);color:var(--ocean)}
+.badge-student{background:#e8f5e9;color:#2e7d32}
+
+/* ═══════════════════════════════════════════
+   ADD SLOT & DELETE
+═══════════════════════════════════════════ */
+.add-slot{display:none;border:2px dashed var(--foam);border-radius:var(--radius-lg);background:transparent;align-items:center;justify-content:center;flex-direction:column;gap:8px;min-height:180px;cursor:pointer;transition:border-color var(--transition),background var(--transition);color:var(--sky);font-size:.84rem;font-family:'DM Sans',sans-serif;padding:20px;text-align:center;width:100%}
+.add-slot:hover{border-color:var(--sky);background:rgba(93,173,226,.06)}
+.add-slot svg{opacity:.45}
+.del-btn{display:none;position:absolute;top:8px;right:8px;z-index:10;background:var(--danger);color:white;border:none;border-radius:50%;width:26px;height:26px;font-size:.75rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.25);transition:transform var(--transition)}
+.del-btn:hover{transform:scale(1.12)}
+.edit-btn{display:none;position:absolute;top:8px;right:40px;z-index:10;background:var(--ocean);color:white;border:none;border-radius:50%;width:26px;height:26px;font-size:.8rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:transform var(--transition)}
+.edit-btn:hover{transform:scale(1.12)}
+
+.empty-state{text-align:center;padding:60px 20px;color:var(--subtle);grid-column:1/-1}
+.empty-state svg{opacity:.18;display:block;margin:0 auto 14px}
+.empty-state p{font-size:.87rem}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer{background:var(--deep);color:rgba(255,255,255,.6);padding:60px 5% 40px}
+.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:30px}
+.footer-brand h3{font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:var(--white);font-weight:400;margin-bottom:6px}
+.footer-brand .sub-label{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sky);opacity:.7;margin-bottom:12px}
+.footer-brand p{font-size:.81rem;line-height:1.76;max-width:320px}
+.footer-brand .school{display:inline-block;margin-top:14px;font-size:.75rem;color:var(--foam);border-top:1px solid rgba(255,255,255,.12);padding-top:12px;line-height:1.6}
+.footer-col h4{font-size:.73rem;letter-spacing:.11em;text-transform:uppercase;color:var(--foam);margin-bottom:16px;font-weight:500}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-col ul li a{text-decoration:none;color:rgba(255,255,255,.5);font-size:.82rem;transition:color var(--transition)}
+.footer-col ul li a:hover{color:var(--foam)}
+.footer-bottom{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:.74rem;color:rgba(255,255,255,.28)}
+
+/* ═══════════════════════════════════════════
+   MODALS
+═══════════════════════════════════════════ */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:3000;background:rgba(7,22,41,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--white);border-radius:var(--radius-lg);width:100%;max-width:540px;padding:38px;position:relative;box-shadow:var(--shadow-lg);animation:popIn .22s ease;max-height:92vh;overflow-y:auto}
+@keyframes popIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.modal-close{position:absolute;top:16px;right:16px;background:var(--mist);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--subtle);font-size:1.1rem;transition:background var(--transition)}
+.modal-close:hover{background:var(--foam)}
+.modal-box h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--navy);margin-bottom:20px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:.81rem;font-weight:500;color:var(--text);margin-bottom:6px}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:10px 14px;border:1.5px solid var(--mist);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--text);background:var(--white);outline:none;transition:border-color var(--transition)}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--sky)}
+.form-group textarea{resize:vertical;min-height:80px}
+.form-hint{font-size:.72rem;color:var(--subtle);margin-top:-8px;margin-bottom:8px;line-height:1.55}
+.btn-save{width:100%;padding:12px;background:linear-gradient(135deg,var(--ocean),var(--mid));color:white;border:none;border-radius:10px;font-size:.9rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity var(--transition);margin-top:8px}
+.btn-save:hover{opacity:.88}
+.login-error{color:var(--danger);font-size:.81rem;min-height:20px;margin-bottom:8px}
+
+/* ═══════════════════════════════════════════
+   LIGHTBOX
+═══════════════════════════════════════════ */
+.lightbox-overlay{display:none;position:fixed;inset:0;z-index:5000;background:rgba(7,22,41,.94);backdrop-filter:blur(10px);align-items:center;justify-content:center;flex-direction:column;padding:20px;opacity:0;transition:opacity .3s ease}
+.lightbox-overlay.open{display:flex;opacity:1}
+.lightbox-img{max-width:100%;max-height:80vh;border-radius:10px;box-shadow:var(--shadow-lg);transform:scale(.95);transition:transform .3s ease;object-fit:contain}
+.lightbox-overlay.open .lightbox-img{transform:scale(1)}
+.lightbox-close{position:absolute;top:22px;right:22px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background var(--transition);z-index:5001}
+.lightbox-close:hover{background:rgba(255,255,255,.22)}
+.lightbox-caption{color:rgba(255,255,255,.8);margin-top:16px;font-size:1rem;font-family:'Cormorant Garamond',serif;letter-spacing:.03em;text-align:center;max-width:800px}
+.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:white;width:44px;height:44px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background var(--transition);z-index:5001}
+.lightbox-nav:hover{background:rgba(255,255,255,.22)}
+#lightboxPrev{left:18px}
+#lightboxNext{right:18px}
+
+/* ═══════════════════════════════════════════
+   SCROLL REVEAL (AKICI KAYDIRMA)
+═══════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════
+   MISC
+═══════════════════════════════════════════ */
+.toast{position:fixed;bottom:24px;right:24px;z-index:9000;background:var(--deep);color:white;padding:12px 22px;border-radius:10px;font-size:.85rem;box-shadow:var(--shadow-lg);opacity:0;transform:translateY(20px);transition:opacity .3s,transform .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+#setupBanner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:8000;background:linear-gradient(90deg,#e65100,#ff8f00);color:white;padding:12px 5%;font-size:.82rem;text-align:center;line-height:1.6}
+#setupBanner a{color:white;text-decoration:underline}
+.back-to-top{position:fixed;bottom:28px;right:28px;z-index:1500;background:var(--ocean);color:white;width:44px;height:44px;border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow);opacity:0;visibility:hidden;transform:translateY(20px);transition:all .3s ease}
+.back-to-top.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.back-to-top:hover{background:var(--navy);transform:translateY(-3px) scale(1.05)}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media(max-width:1000px){.about-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}}
+@media(max-width:680px){
+  .nav-links{display:none}.hamburger{display:flex}
+  section{padding:70px 5%}
+  .about-badge{display:none}
+  .footer-inner{grid-template-columns:1fr;gap:30px}
+  .hero-sub-project{flex-direction:column;align-items:flex-start}
+  .hero-sub-project-desc{border-left:none;padding-left:0;border-top:1px solid rgba(174,214,241,.3);padding-top:10px;margin-top:6px}
+  .lightbox-nav{display:none}
+  .back-to-top{bottom:20px;right:20px;width:40px;height:40px}
+  .landing-subproject{flex-direction:column}
+  .landing-subproject-left{border-right:none;border-bottom:1px solid rgba(174,214,241,.2);padding-bottom:14px}
+  .logo-bar-sublabel{display:none}
+  .logo-bar-item{padding:0 12px;gap:7px}
+  .logo-bar-item img{width:24px;height:24px}
+  .logo-bar-label{font-size:.6rem}
+}
+/* ═══════════════════════════════════════════
+   LOGO BAR — elegant sticky footer
+═══════════════════════════════════════════ */
+.logo-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 1200;
+  background: rgba(7,22,41,.72);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-top: 1px solid rgba(93,173,226,.15);
+  padding: 0 5%; height: 58px;
+  display: flex; align-items: center;
+  transition: opacity .4s ease, transform .4s ease;
+}
+.logo-bar.hidden { opacity: 0; transform: translateY(100%); pointer-events: none; }
+.logo-bar-inner {
+  max-width: 1200px; margin: 0 auto; width: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 0;
+}
+.logo-bar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 22px; text-decoration: none;
+  border-right: 1px solid rgba(174,214,241,.1);
+  transition: opacity var(--transition);
+  opacity: .6;
+}
+.logo-bar-item:last-child { border-right: none; }
+.logo-bar-item:hover { opacity: 1; }
+.logo-bar-item img {
+  height: 30px; width: 30px; object-fit: contain;
+  filter: brightness(1) saturate(.6);
+  transition: filter var(--transition);
+  border-radius: 5px;
+}
+.logo-bar-item:hover img { filter: brightness(1.1) saturate(1); }
+.logo-bar-label {
+  font-size: .67rem; font-weight: 500; letter-spacing: .05em;
+  color: rgba(255,255,255,.65); white-space: nowrap; line-height: 1.3;
+  transition: color var(--transition);
+}
+.logo-bar-item:hover .logo-bar-label { color: rgba(255,255,255,.9); }
+.logo-bar-sublabel {
+  font-size: .58rem; color: rgba(255,255,255,.35); letter-spacing: .03em; display: block;
+}
+
+/* Give page room for the bar */
+body { padding-bottom: 58px; }
+/* ═══════════════════════════════════════════
+   DOC VIEWER MODAL
+═══════════════════════════════════════════ */
+.docviewer-overlay{
+  display:none;position:fixed;inset:0;z-index:6000;
+  background:rgba(7,22,41,.92);backdrop-filter:blur(10px);
+  flex-direction:column;align-items:stretch;
+  animation:fadeIn .2s ease;
+}
+.docviewer-overlay.open{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.docviewer-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;height:52px;flex-shrink:0;
+  background:rgba(7,22,41,.95);border-bottom:1px solid rgba(93,173,226,.15);
+  gap:14px;
+}
+.docviewer-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.1rem;
+  color:var(--white);font-weight:400;flex:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.docviewer-actions{display:flex;align-items:center;gap:8px}
+.docviewer-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.8);border-radius:8px;padding:6px 14px;
+  font-size:.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;
+  text-decoration:none;transition:background var(--transition);white-space:nowrap;
+}
+.docviewer-btn:hover{background:rgba(255,255,255,.18);color:white}
+.docviewer-close{
+  background:rgba(229,57,53,.15);border:1px solid rgba(229,57,53,.3);
+  color:#ef9a9a;border-radius:8px;padding:6px 14px;
+  font-size:.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;
+  transition:background var(--transition);
+}
+.docviewer-close:hover{background:rgba(229,57,53,.35);color:white}
+.docviewer-frame{flex:1;border:none;display:block;background:#f5f5f5}
+.docviewer-loading{
+  position:absolute;inset:0;top:52px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.4);font-size:.9rem;gap:16px;pointer-events:none;
+}
+.docviewer-spinner{
+  width:36px;height:36px;border:3px solid rgba(93,173,226,.2);
+  border-top-color:var(--sky);border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- SETUP BANNER -->
+<div id="setupBanner">
+  ⚠️ <strong>Firebase henüz yapılandırılmadı.</strong>
+  Dosyayı bir editörde aç, <code>firebaseConfig</code> değerlerini kendi projenle değiştir.
+  <a href="https://console.firebase.google.com" target="_blank">Firebase Console →</a>
+</div>
+
+<!-- ADMIN BAR -->
+<div id="adminBar">
+  <div class="al"><div class="dot"></div><span>Admin paneli aktif — <strong id="adminEmail"></strong></span></div>
+  <button class="logout-btn" id="logoutBtn">Çıkış Yap</button>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-brand">
+    <div class="nav-icon" style="background:none;box-shadow:none;overflow:hidden;border-radius:8px"><img src="https://i.postimg.cc/dVMD0JxJ/10444e8f-9216-4689-87bc-42014ad86f86.png" alt="Mavi Ufuklar" style="width:100%;height:100%;object-fit:contain"></div>
+    <div class="nav-logo-wrap">
+      <span class="nav-super">Erdemli Nesiller</span>
+      <span class="nav-title">Mavi Ufuklar</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#hakkinda">Proje</a></li>
+    <li><a href="#galeri">Galeri</a></li>
+    <li><a href="#videolar">Videolar</a></li>
+    <li><a href="#podcastler">Podcastler</a></li>
+    <li><a href="#sunumlar">Sunumlar</a></li>
+    <li><a href="#calismalar">Çalışmalar</a></li>
+    <li><a href="#haberler">Haberler</a></li>
+    <li><a href="#takim">Ekip</a></li>
+  </ul>
+  <button id="loginBtn">🔑 Giriş</button>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hakkinda" onclick="closeMobile()">Proje Hakkında</a>
+  <a href="#galeri" onclick="closeMobile()">Fotoğraf Galerisi</a>
+  <a href="#videolar" onclick="closeMobile()">Videolar</a>
+  <a href="#podcastler" onclick="closeMobile()">Podcastler</a>
+  <a href="#sunumlar" onclick="closeMobile()">Sunumlar</a>
+  <a href="#calismalar" onclick="closeMobile()">Öğrenci Çalışmaları</a>
+  <a href="#haberler" onclick="closeMobile()">Haberler</a>
+  <a href="#takim" onclick="closeMobile()">Ekibimiz</a>
+</div>
+
+<!-- ══════════════════════════════════
+     LANDING PAGE
+══════════════════════════════════ -->
+<section class="landing" id="ana-sayfa">
+  <div class="landing-bubbles" id="bubbles"></div>
+  <div class="landing-content">
+
+    <!-- Organisation links -->
+    <div class="landing-orgs">
+      <a href="https://kirklareli.meb.gov.tr/" target="_blank" rel="noopener" class="org-badge">
+        <img src="https://i.postimg.cc/T3vQZRSW/8e9a782b-e2e8-4f5c-8189-e1d04cf072db.jpg" alt="Kırklareli MEM">
+        Kırklareli İl Milli Eğitim Müdürlüğü
+      </a>
+      <a href="https://luleburgazataturkanadolulisesi.meb.k12.tr/" target="_blank" rel="noopener" class="org-badge">
+        <img src="https://i.postimg.cc/C5HH08X2/468333348-10161734184389210-6024325993737174782-n.jpg" alt="Lüleburgaz Atatürk AL">
+        Lüleburgaz Atatürk Anadolu Lisesi
+      </a>
+    </div>
+
+    <!-- Primary project — Erdemli Nesiller -->
+    <div class="landing-super">Sosyal Sorumluluk Projesi &nbsp;·&nbsp; 2025–2026</div>
+    <h1 class="landing-title"><strong>Erdemli Nesiller</strong></h1>
+
+    <!-- Separator -->
+    <div class="landing-wave-sep">
+      <div class="landing-wave-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        bünyesinde
+      </div>
+    </div>
+
+    <!-- Sub-project — Mavi Ufuklar -->
+    <div style="display:flex;justify-content:center;margin-bottom:36px">
+      <div class="landing-subproject">
+        <div class="landing-subproject-left">
+          <span class="landing-subproject-eyebrow">Alt Proje</span>
+          <div class="landing-subproject-name">Mavi Ufuklar</div>
+        </div>
+        <div class="landing-subproject-right">
+          <div class="landing-subproject-theme">
+            🌊 Okyanus Okuryazarlığı<br>
+            💧 Su Farkındalığı &amp; Koruma
+          </div>
+          <span class="landing-subproject-year">2025 – 2026 Eğitim Yılı</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Welcome message -->
+    <p class="landing-welcome">
+      Suyun bilgeliği, geleceğin anahtarıdır. Bu platformda okyanus okuryazarlığı yolculuğumuzu,
+      araştırmalarımızı ve faaliyetlerimizi sizinle paylaşıyoruz.
+    </p>
+
+    <!-- CTAs -->
+    <div class="landing-cta">
+      <a href="#hakkinda" class="btn-landing-primary">
+        Projeyi Keşfet
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </a>
+      <a href="#galeri" class="btn-landing-outline">
+        Faaliyetlere Göz At →
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Scroll cue -->
+  <div class="landing-scroll">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    Kaydır
+  </div>
+
+  <svg class="landing-waves" viewBox="0 0 1440 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,80 C240,160 480,0 720,80 C960,160 1200,0 1440,80 L1440,160 L0,160 Z" fill="#f8f5f0"/>
+  </svg>
+</section>
+
+<!-- ══════════════════════════════════
+     ABOUT
+══════════════════════════════════ -->
+<section id="hakkinda">
+  <div class="section-header">
+    <span class="section-eyebrow">Proje Hakkında</span>
+    <h2 class="section-title">Neden Mavi Ufuklar?</h2>
+    <div class="section-divider"></div>
+  </div>
+<div class="about-grid">
+    
+    <div class="about-text">
+      <h3>Su kaynaklarımızı korumak,<br>geleceğimizi korumaktır.</h3>
+      <p>Mavi Ufuklar, Erdemli Nesiller Projesi çerçevesinde yürütülen okyanus ve su okuryazarlığı odaklı bir eğitim girişimidir. Öğrencilerimiz deniz ekosistemlerini tanımak, su kirliliğinin tehlikelerini kavramak ve su kaynaklarını koruma konusunda bilinçlenmek amacıyla araştırmalar, saha çalışmaları ve gönüllü faaliyetler gerçekleştirmektedir.</p>
+      <p>Projemiz boyunca üretilen tüm çalışmalar, fotoğraflar, videolar, podcast içerikleri ve sunumlar bu platformda paylaşılacaktır.</p>
+      
+      <div class="about-stats">
+        <div class="stat-card">
+          <div class="stat-number" id="stat-students" data-target="45">0</div>
+          <div class="stat-label">Katılımcı Öğrenci</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-activities" data-target="12">0</div>
+          <div class="stat-label">Faaliyet</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-months" data-target="9">0</div>
+          <div class="stat-label">Proje Ayı</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-works" data-target="38">0</div>
+          <div class="stat-label">Öğrenci Çalışması</div>
+        </div>
+      </div>
+    </div> <div class="about-visual">
+      <div class="about-visual-card">
+        <h4>Projemizin Temel Temaları</h4>
+        <ul class="theme-list">
+          <li>Su kaynaklarının korunması ve sürdürülebilirliği</li>
+          <li>Deniz ve okyanus ekosistemlerinin tanınması</li>
+          <li>Su kirliliği ve iklim değişikliğinin etkileri</li>
+          <li>Plastik atık farkındalığı ve azaltım stratejileri</li>
+          <li>Gönüllü temizlik ve çevre faaliyetleri</li>
+          <li>Yerel su kaynaklarının araştırılması</li>
+        </ul>
+      </div>
+      <div class="about-badge">Kırklareli MEM Onaylı Proje ✓</div>
+    </div>
+    
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     GALLERY — ALBUM SYSTEM
+══════════════════════════════════ -->
+<section id="galeri">
+  <div class="section-header">
+    <span class="section-eyebrow">Fotoğraf Galerisi</span>
+    <h2 class="section-title" id="galleryTitle">Faaliyet Albümleri</h2>
+    <p class="section-desc" id="galleryDesc">Her faaliyetin fotoğrafları kendi albümünde toplanmıştır. Bir albüme tıklayın.</p>
+    <div class="section-divider"></div>
+  </div>
+
+  <!-- Album list view -->
+  <div class="album-grid" id="albumGrid">
+    <div class="empty-state" id="emptyAlbums">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      <p>Henüz albüm oluşturulmadı.</p>
+    </div>
+    <button class="add-slot" id="addAlbumBtn" onclick="openModal('album')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+      Yeni Albüm Oluştur
+    </button>
+  </div>
+
+  <!-- Album detail view -->
+  <div class="album-detail" id="albumDetail">
+    <div class="album-detail-header">
+      <button class="back-btn" id="backToAlbums">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Tüm Albümler
+      </button>
+      <div>
+        <div class="album-detail-title" id="detailAlbumName">Albüm Adı</div>
+        <div style="font-size:.8rem;color:var(--subtle);margin-top:3px" id="detailAlbumDate"></div>
+      </div>
+      <span class="album-detail-sub" id="detailAlbumCount"></span>
+    </div>
+    <div class="photo-grid" id="photoGrid">
+      <div class="empty-state" id="emptyPhotos"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><p>Bu albümde henüz fotoğraf yok.</p></div>
+    </div>
+    <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap" id="albumActionBar">
+      <button class="add-slot" id="addPhotoBtn" style="min-height:120px;max-width:220px;display:none" onclick="openModal('photo')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+        Fotoğraf Ekle
+      </button>
+      <button class="del-btn" id="deleteAlbumBtn" style="display:none;position:static;width:auto;height:auto;border-radius:100px;padding:8px 18px;font-size:.8rem;background:var(--danger)" onclick="deleteCurrentAlbum()">
+        Albümü Sil
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEOS -->
+<section id="videolar" style="background:var(--white)">
+  <div class="section-header">
+    <span class="section-eyebrow">Videolar</span>
+    <h2 class="section-title">Video İçeriklerimiz</h2>
+    <p class="section-desc">YouTube veya diğer platformlardaki video çalışmalarımız.</p>
+    <div class="section-divider"></div>
+  </div>
+  <div class="media-grid" id="videoGrid">
+    <div class="empty-state" id="emptyVideos"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16"/></svg><p>Henüz video eklenmedi.</p></div>
+    <button class="add-slot" id="addVideo" onclick="openModal('videos')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Video Ekle
+    </button>
+  </div>
+</section>
+
+<!-- PODCASTS -->
+<section id="podcastler">
+  <div class="section-header">
+    <span class="section-eyebrow">Podcastler</span>
+    <h2 class="section-title">Ses İçeriklerimiz</h2>
+    <p class="section-desc">Spotify veya başka platformlardaki podcast bölümlerimiz.</p>
+    <div class="section-divider"></div>
+  </div>
+  <div class="podcast-list" id="podcastList">
+    <div class="empty-state" id="emptyPodcasts"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg><p>Henüz podcast eklenmedi.</p></div>
+    <button class="add-slot" id="addPodcast" onclick="openModal('podcasts')" style="max-width:800px;margin:0 auto">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Podcast Ekle
+    </button>
+  </div>
+</section>
+
+<!-- PRESENTATIONS -->
+<section id="sunumlar" style="background:var(--sand)">
+  <div class="section-header">
+    <span class="section-eyebrow">Sunumlar</span>
+    <h2 class="section-title">Proje Sunumları</h2>
+    <p class="section-desc">Canva, Google Slides veya PowerPoint sunumlarımız.</p>
+    <div class="section-divider"></div>
+  </div>
+  <div class="media-grid" id="presentationGrid">
+    <div class="empty-state" id="emptyPresentations"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><p>Henüz sunum eklenmedi.</p></div>
+    <button class="add-slot" id="addPresentation" onclick="openModal('presentations')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Sunum Ekle
+    </button>
+  </div>
+</section>
+
+<!-- STUDENT WORKS -->
+<section id="calismalar">
+  <div class="section-header">
+    <span class="section-eyebrow">Öğrenci Çalışmaları</span>
+    <h2 class="section-title">Araştırma &amp; Üretimler</h2>
+    <p class="section-desc">Öğrencilerimizin hazırladığı araştırmalar, posterler ve infografikler.</p>
+    <div class="section-divider"></div>
+  </div>
+  <div class="works-grid" id="worksGrid">
+    <div class="empty-state" id="emptyWorks"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>Henüz çalışma eklenmedi.</p></div>
+    <button class="add-slot" id="addWork" onclick="openModal('works')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Çalışma Ekle
+    </button>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section id="haberler">
+  <div class="section-header">
+    <span class="section-eyebrow">Haberler &amp; Duyurular</span>
+    <h2 class="section-title">Neler Oluyor?</h2>
+    <p class="section-desc">Proje sürecindeki gelişmeler ve duyurular.</p>
+    <div class="section-divider"></div>
+  </div>
+  <div class="news-grid" id="newsGrid">
+    <div class="empty-state" id="emptyNews"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v2"/><path d="M2 10h10"/></svg><p>Henüz haber eklenmedi.</p></div>
+    <button class="add-slot" id="addNews" onclick="openModal('news')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Haber Ekle
+    </button>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="takim" style="background:var(--white)">
+  <div class="section-header">
+    <span class="section-eyebrow">Ekibimiz</span>
+    <h2 class="section-title">Mavi Ufuklar Ailesi</h2>
+    <p class="section-desc">Projemize katkı sağlayan öğretmen ve öğrencilerimiz.</p>
+    <div class="section-divider"></div>
+  </div>
+  <div class="team-grid" id="teamGrid">
+    <div class="empty-state" id="emptyTeam"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><p>Henüz üye eklenmedi.</p></div>
+    <button class="add-slot" id="addTeam" onclick="openModal('team')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Üye Ekle
+    </button>
+  </div>
+</section>
+
+<!-- LOGO BAR — elegant sticky footer with real logos -->
+<div class="logo-bar" id="logoBar">
+  <div class="logo-bar-inner">
+    <a href="https://kirklareli.meb.gov.tr/" target="_blank" rel="noopener" class="logo-bar-item" title="Kırklareli İl Milli Eğitim Müdürlüğü">
+      <img src="https://i.postimg.cc/T3vQZRSW/8e9a782b-e2e8-4f5c-8189-e1d04cf072db.jpg" alt="Kırklareli MEM">
+      <div class="logo-bar-label">
+        Kırklareli MEM
+        <span class="logo-bar-sublabel">İl Milli Eğitim Müdürlüğü</span>
+      </div>
+    </a>
+    <a href="https://luleburgazataturkanadolulisesi.meb.k12.tr/" target="_blank" rel="noopener" class="logo-bar-item" title="Lüleburgaz Atatürk Anadolu Lisesi">
+      <img src="https://i.postimg.cc/C5HH08X2/468333348-10161734184389210-6024325993737174782-n.jpg" alt="Lüleburgaz Atatürk AL">
+      <div class="logo-bar-label">
+        Atatürk Anadolu Lisesi
+        <span class="logo-bar-sublabel">Lüleburgaz</span>
+      </div>
+    </a>
+    <div class="logo-bar-item" style="cursor:default">
+      <img src="https://i.postimg.cc/nhM7RNV8/0b919696-f942-4271-bddb-de74dd1d2935.jpg" alt="Erdemli Nesiller">
+      <div class="logo-bar-label">
+        Erdemli Nesiller
+        <span class="logo-bar-sublabel">Sosyal Sorumluluk Projesi</span>
+      </div>
+    </div>
+    <div class="logo-bar-item" style="cursor:default">
+      <img src="https://i.postimg.cc/dVMD0JxJ/10444e8f-9216-4689-87bc-42014ad86f86.png" alt="Mavi Ufuklar">
+      <div class="logo-bar-label">
+        Mavi Ufuklar
+        <span class="logo-bar-sublabel">Okyanus Okuryazarlığı</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" title="Yukarı çık">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<!-- DOC VIEWER MODAL -->
+<div class="docviewer-overlay" id="docViewerOverlay">
+  <div class="docviewer-toolbar">
+    <span class="docviewer-title" id="docViewerTitle"></span>
+    <div class="docviewer-actions">
+      <a class="docviewer-btn" id="docViewerOpenBtn" href="#" target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Yeni sekmede aç
+      </a>
+      <button class="docviewer-close" id="docViewerClose">✕ Kapat</button>
+    </div>
+  </div>
+  <div style="position:relative;flex:1;display:flex;flex-direction:column">
+    <div class="docviewer-loading" id="docViewerLoading">
+      <div class="docviewer-spinner"></div>
+      <span>Belge yükleniyor…</span>
+    </div>
+    <iframe class="docviewer-frame" id="docViewerFrame" src="" allowfullscreen
+      onload="document.getElementById('docViewerLoading').style.display='none'"></iframe>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal-box">
+    <button class="modal-close" id="closeLoginBtn">✕</button>
+    <h3>🔑 Admin Girişi</h3>
+    <div class="form-group"><label>E-posta</label><input type="email" id="loginEmail" placeholder="admin@example.com"></div>
+    <div class="form-group"><label>Şifre</label><input type="password" id="loginPass" placeholder="••••••••"></div>
+    <p class="login-error" id="loginError"></p>
+    <button class="btn-save" id="doLoginBtn">Giriş Yap</button>
+  </div>
+</div>
+
+<!-- CONTENT MODAL -->
+<div class="modal-overlay" id="contentModal">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" id="closeModalBtn">✕</button>
+    <h3 id="modalTitle">İçerik Ekle</h3>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightboxOverlay">
+  <button class="lightbox-close" id="lightboxClose">✕</button>
+  <button class="lightbox-nav" id="lightboxPrev">‹</button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <button class="lightbox-nav" id="lightboxNext">›</button>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     FIREBASE MODULE
+════════════════════════════════════════════════════ -->
+<script type="module">
+// ════════════════════════════════════════════════════
+//  ★ FIREBASE CONFIG — kendi değerlerinle değiştir
+// ════════════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyAbJBSfU3oxoCeqNFKkMvs2cPQ9XtkbufE",
+  authDomain: "maviufuklar-d5422.firebaseapp.com",
+  databaseURL: "https://maviufuklar-d5422-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "maviufuklar-d5422",
+  storageBucket: "maviufuklar-d5422.firebasestorage.app",
+  messagingSenderId: "140162812812",
+  appId: "1:140162812812:web:ca3aa85603602ffb4f24a9"
+};
+// ════════════════════════════════════════════════════
+
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getDatabase,ref,push,set,onValue,remove,get}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+if(firebaseConfig.apiKey==="BURAYA_API_KEY")document.getElementById('setupBanner').style.display='block';
+
+let app,auth,db;
+try{app=initializeApp(firebaseConfig);auth=getAuth(app);db=getDatabase(app);}catch(e){console.warn('Firebase:',e)}
+
+/* ── Auth ─────────────────────────────────────────── */
+if(auth){
+  onAuthStateChanged(auth,user=>{
+    const bar=document.getElementById('adminBar');
+    const lbtn=document.getElementById('loginBtn');
+    bar.style.display=user?'flex':'none';
+    lbtn.style.display=user?'none':'flex';
+    document.getElementById('mainNav').classList.toggle('has-bar',!!user);
+    document.getElementById('mobileMenu').style.top=user?'106px':'66px';
+    if(user){
+      document.getElementById('adminEmail').textContent=user.email;
+      setAdminUI(true);
+    }else{
+      setAdminUI(false);
+    }
+  });
+}
+
+function setAdminUI(on){
+  document.querySelectorAll('.add-slot').forEach(el=>el.style.display=on?'flex':'none');
+  document.querySelectorAll('.del-btn').forEach(el=>el.style.display=on?'flex':'none');
+  // album detail action bar
+  const ab=document.getElementById('addPhotoBtn');
+  const db2=document.getElementById('deleteAlbumBtn');
+  if(ab)ab.style.display=on&&window._curAlbumKey?'flex':'none';
+  if(db2)db2.style.display=on&&window._curAlbumKey?'flex':'none';
+}
+window._isAdmin=()=>auth&&!!auth.currentUser;
+
+/* ── Login / Logout ───────────────────────────────── */
+document.getElementById('doLoginBtn').addEventListener('click',async()=>{
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPass').value;
+  const errEl=document.getElementById('loginError');
+  errEl.textContent='';
+  try{await signInWithEmailAndPassword(auth,email,pass);document.getElementById('loginModal').classList.remove('open');showToast('Hoş geldiniz ✓');}
+  catch(e){errEl.textContent='E-posta veya şifre hatalı.';}
+});
+document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('doLoginBtn').click()});
+document.getElementById('logoutBtn').addEventListener('click',async()=>{await signOut(auth);showToast('Çıkış yapıldı.');});
+
+/* ── ALBUM SYSTEM ─────────────────────────────────── */
+// Load albums
+if(db){
+  onValue(ref(db,'albums'),snap=>{renderAlbums(snap.val());});
+  // Load other sections
+  ['videos','podcasts','presentations','works','news','team'].forEach(sec=>{
+    onValue(ref(db,`content/${sec}`),snap=>{renderSection(sec,snap.val());});
+  });
+}
+
+function renderAlbums(data){
+  const grid=document.getElementById('albumGrid');
+  const empty=document.getElementById('emptyAlbums');
+  const addBtn=document.getElementById('addAlbumBtn');
+  // remove old cards
+  Array.from(grid.children).forEach(c=>{if(!c.classList.contains('empty-state')&&!c.id)c.remove();});
+  const hasData=data&&Object.keys(data).length>0;
+  if(empty)empty.style.display=hasData?'none':'';
+  if(!hasData)return;
+
+  Object.entries(data).reverse().forEach(([key,album])=>{
+    const photos=album.photos?Object.values(album.photos):[];
+    const photoCount=photos.length;
+    const coverPhotos=photos.slice(0,4);
+    const countClass=photoCount===0?'count-0':photoCount===1?'count-1':photoCount===2?'count-2':photoCount===3?'count-3':'count-many';
+
+    let coverHtml='';
+    if(coverPhotos.length===0){
+      coverHtml=`<div class="album-cover-empty"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Fotoğraf yok</span></div>`;
+    }else{
+      coverPhotos.forEach((p,i)=>{
+        coverHtml+=`<div class="ac-img"><img src="${esc(p.url||'')}" alt="${esc(p.title||'')}"></div>`;
+      });
+      if(photoCount>4)coverHtml+=`<div class="album-more-badge">+${photoCount-4}</div>`;
+    }
+
+    const delB=window._isAdmin()?`<button class="del-btn" style="display:flex" onclick="event.stopPropagation();window._delAlbum('${key}')">✕</button>`:'';
+    const editB=window._isAdmin()?`<button class="edit-btn" style="display:flex" onclick="event.stopPropagation();window._editAlbum('${key}')">✎</button>`:'';
+
+    const card=document.createElement('div');
+    card.className='album-card';
+    card.innerHTML=`
+      ${editB}${delB}
+      <div class="album-cover ${countClass}">${coverHtml}</div>
+      <div class="album-info">
+        <div class="album-name">${esc(album.name)}</div>
+        <div class="album-desc">${esc(album.desc||'')}</div>
+        <div class="album-meta-row">
+          <span class="album-date">${esc(album.date||'')}</span>
+          <span class="album-count">${photoCount} fotoğraf</span>
+        </div>
+      </div>`;
+    card.addEventListener('click',()=>openAlbum(key,album));
+    grid.insertBefore(card,addBtn);
+  });
+}
+
+window._curAlbumKey=null;
+window._curAlbumPhotos=[];
+let lightboxIdx=0;
+
+function openAlbum(key,album){
+  window._curAlbumKey=key;
+  document.getElementById('albumGrid').style.display='none';
+  document.getElementById('albumDetail').classList.add('active');
+  document.getElementById('galleryTitle').textContent=album.name||'Albüm';
+  document.getElementById('galleryDesc').textContent=album.desc||'';
+  document.getElementById('detailAlbumName').textContent=album.name||'';
+  document.getElementById('detailAlbumDate').textContent=album.date||'';
+
+  // live listen to photos
+  onValue(ref(db,`albums/${key}/photos`),snap=>{
+    renderPhotos(key,snap.val());
+  });
+
+  if(window._isAdmin()){
+    document.getElementById('addPhotoBtn').style.display='flex';
+    document.getElementById('deleteAlbumBtn').style.display='flex';
+  }
+}
+
+function renderPhotos(albumKey,data){
+  const grid=document.getElementById('photoGrid');
+  const empty=document.getElementById('emptyPhotos');
+  const addBtn=document.getElementById('addPhotoBtn');
+  Array.from(grid.children).forEach(c=>{if(!c.classList.contains('empty-state'))c.remove();});
+  window._curAlbumPhotos=[];
+
+  const hasData=data&&Object.keys(data).length>0;
+  if(empty)empty.style.display=hasData?'none':'';
+  const count=hasData?Object.keys(data).length:0;
+  document.getElementById('detailAlbumCount').textContent=count?`${count} fotoğraf`:'';
+
+  if(!hasData)return;
+
+  Object.entries(data).forEach(([pKey,photo])=>{
+    window._curAlbumPhotos.push({key:pKey,url:photo.url,title:photo.title||''});
+    const thumb=document.createElement('div');
+    thumb.className='photo-thumb';
+    const delB=window._isAdmin()?`<button class="photo-del" onclick="event.stopPropagation();window._delPhoto('${albumKey}','${pKey}')">✕</button>`:'';
+    const edtB=window._isAdmin()?`<button class="photo-del" style="right:36px;background:var(--ocean)" onclick="event.stopPropagation();window._editPhoto('${albumKey}','${pKey}')">✎</button>`:'';
+    thumb.innerHTML=`${edtB}${delB}<img src="${esc(photo.url||'')}" alt="${esc(photo.title||'')}">`;
+    thumb.addEventListener('click',()=>{
+      const idx=window._curAlbumPhotos.findIndex(p=>p.key===pKey);
+      openLightbox(idx);
+    });
+    grid.appendChild(thumb);
+  });
+}
+
+document.getElementById('backToAlbums').addEventListener('click',()=>{
+  window._curAlbumKey=null;
+  window._curAlbumPhotos=[];
+  document.getElementById('albumGrid').style.display='';
+  document.getElementById('albumDetail').classList.remove('active');
+  document.getElementById('addPhotoBtn').style.display='none';
+  document.getElementById('deleteAlbumBtn').style.display='none';
+  document.getElementById('galleryTitle').textContent='Faaliyet Albümleri';
+  document.getElementById('galleryDesc').textContent='Her faaliyetin fotoğrafları kendi albümünde toplanmıştır. Bir albüme tıklayın.';
+});
+
+/* Lightbox with nav */
+function openLightbox(idx){
+  lightboxIdx=idx;
+  showLightboxAt(idx);
+  document.getElementById('lightboxOverlay').classList.add('open');
+}
+function showLightboxAt(idx){
+  const photos=window._curAlbumPhotos;
+  if(!photos.length)return;
+  idx=Math.max(0,Math.min(idx,photos.length-1));
+  lightboxIdx=idx;
+  document.getElementById('lightboxImg').src=photos[idx].url||'';
+  document.getElementById('lightboxCaption').textContent=photos[idx].title||'';
+}
+document.getElementById('lightboxClose').addEventListener('click',()=>document.getElementById('lightboxOverlay').classList.remove('open'));
+document.getElementById('lightboxOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('lightboxOverlay'))document.getElementById('lightboxOverlay').classList.remove('open');});
+document.getElementById('lightboxPrev').addEventListener('click',()=>showLightboxAt(lightboxIdx-1));
+document.getElementById('lightboxNext').addEventListener('click',()=>showLightboxAt(lightboxIdx+1));
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('lightboxOverlay').classList.contains('open'))return;
+  if(e.key==='Escape')document.getElementById('lightboxOverlay').classList.remove('open');
+  if(e.key==='ArrowLeft')showLightboxAt(lightboxIdx-1);
+  if(e.key==='ArrowRight')showLightboxAt(lightboxIdx+1);
+});
+
+/* Delete album */
+window._delAlbum=async(key)=>{
+  if(!confirm('Bu albümü ve içindeki tüm fotoğrafları silmek istiyor musun?'))return;
+  await remove(ref(db,`albums/${key}`));
+  showToast('Albüm silindi.');
+};
+window.deleteCurrentAlbum=()=>{
+  if(window._curAlbumKey)window._delAlbum(window._curAlbumKey);
+  document.getElementById('backToAlbums').click();
+};
+
+/* Delete photo */
+window._delPhoto=async(albumKey,photoKey)=>{
+  if(!confirm('Bu fotoğrafı silmek istiyor musun?'))return;
+  await remove(ref(db,`albums/${albumKey}/photos/${photoKey}`));
+  showToast('Fotoğraf silindi.');
+};
+
+/* ── Save item ────────────────────────────────────── */
+window._saveItem=async(type,data)=>{
+  if(type==='album'){
+    // create new album node
+    await push(ref(db,'albums'),{name:data.name,date:data.date,desc:data.desc,ts:Date.now()});
+    showToast('Albüm oluşturuldu ✓');
+  }else if(type==='photo'){
+    // add photo to current album
+    if(!window._curAlbumKey){showToast('Önce bir albüm seçin.');return;}
+    await push(ref(db,`albums/${window._curAlbumKey}/photos`),{url:data.url,title:data.title,ts:Date.now()});
+    showToast('Fotoğraf eklendi ✓');
+  }else{
+    await push(ref(db,`content/${type}`),{...data,ts:Date.now()});
+    showToast('İçerik kaydedildi ✓');
+  }
+  document.getElementById('contentModal').classList.remove('open');
+};
+
+/* ── Other sections render ────────────────────────── */
+const gridMap={videos:'videoGrid',podcasts:'podcastList',presentations:'presentationGrid',works:'worksGrid',news:'newsGrid',team:'teamGrid'};
+const emptyMap={videos:'emptyVideos',podcasts:'emptyPodcasts',presentations:'emptyPresentations',works:'emptyWorks',news:'emptyNews',team:'emptyTeam'};
+const addMap={videos:'addVideo',podcasts:'addPodcast',presentations:'addPresentation',works:'addWork',news:'addNews',team:'addTeam'};
+
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function adminBtns(sec,key){
+  if(!window._isAdmin())return'';
+  return `<button class="edit-btn" style="display:flex" title="Düzenle" onclick="window._edit('${sec}','${key}')">✎</button>
+          <button class="del-btn"  style="display:flex" title="Sil"     onclick="window._del('${sec}','${key}')">✕</button>`;
+}
+
+function renderSection(sec,data){
+  const grid=document.getElementById(gridMap[sec]);
+  const empty=document.getElementById(emptyMap[sec]);
+  const add=document.getElementById(addMap[sec]);
+  if(!grid)return;
+  Array.from(grid.children).forEach(c=>{if(!c.classList.contains('empty-state')&&c.id!==addMap[sec])c.remove();});
+  const hasData=data&&Object.keys(data).length>0;
+  if(empty)empty.style.display=hasData?'none':'';
+  if(!hasData)return;
+
+  Object.entries(data).reverse().forEach(([key,item])=>{
+    const ab=adminBtns(sec,key);
+    const el=document.createElement('div');
+    switch(sec){
+      case'videos':
+        el.className='media-card';
+        if(item.embed){
+          const ytMatch=item.embed.match(/(?:v=|\/embed\/|youtu\.be\/|\/v\/|\/shorts\/)([A-Za-z0-9_-]{11})/);
+          const ytId=ytMatch?ytMatch[1]:null;
+          const thumbUrl=ytId?`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`:'';
+          const watchUrl=ytId?`https://www.youtube.com/watch?v=${ytId}`:item.embed;
+          el.innerHTML=`${ab}
+            <a class="yt-card" href="${esc(watchUrl)}" target="_blank" rel="noopener" title="${esc(item.title)}">
+              ${thumbUrl?`<img src="${thumbUrl}" alt="${esc(item.title)}" loading="lazy">`:'<div style="width:100%;height:100%;background:var(--deep)"></div>'}
+              <div class="yt-play"><div class="yt-play-btn"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+            </a>
+            <div class="media-info"><div class="media-title">${esc(item.title)}</div><div class="media-sub">${esc(item.sub)}</div></div>`;
+        }else{
+          el.innerHTML=`${ab}<div class="embed-wrapper"><div class="embed-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="currentColor"/></svg></div></div><div class="media-info"><div class="media-title">${esc(item.title)}</div><div class="media-sub">${esc(item.sub)}</div></div>`;
+        }
+        break;
+      case'podcasts':
+        el.className='podcast-card';
+        el.innerHTML=`${ab}${item.embed?`<div class="podcast-embed">${item.embed}</div>`:''}<div class="podcast-info"><div class="podcast-title">${esc(item.title)}</div><div class="podcast-desc">${esc(item.desc)}</div></div>`;
+        break;
+      case'presentations':
+        el.className='media-card';
+        el.innerHTML=`${ab}<div class="embed-wrapper">${item.embed?`<iframe src="${esc(item.embed)}" allowfullscreen></iframe>`:`<div class="embed-placeholder">⬛</div>`}</div><div class="media-info"><div class="media-title">${esc(item.title)}</div><div class="media-sub">${esc(item.sub)}</div></div>`;
+        break;
+      case'works':
+        el.className='work-card';
+        el.innerHTML=`${ab}<span class="work-type">${esc(item.type)}</span><div class="work-title">${esc(item.title)}</div><div class="work-author">Hazırlayan: ${esc(item.author)}</div>${item.url?`<button class="work-link doc-open-btn" data-url="${esc(item.url)}" data-title="${esc(item.title)}">İncele →</button>`:''}`;
+        // attach click after innerHTML so data attrs are accessible cleanly
+        const btn=el.querySelector('.doc-open-btn');
+        if(btn)btn.addEventListener('click',()=>openDocViewer(btn.dataset.url,btn.dataset.title));
+        break;
+      case'news':
+        el.className='news-card';
+        el.innerHTML=`${ab}<div class="news-img">${item.emoji||'📰'}</div><div class="news-body"><div class="news-date">${esc(item.date)}</div><div class="news-title">${esc(item.title)}</div><div class="news-excerpt">${esc(item.content)}</div></div>`;
+        break;
+      case'team':
+        const init=(item.name||'?').charAt(0).toUpperCase();
+        const col=item.kind==='teacher'?'linear-gradient(135deg,#1565a7,#5dade2)':'linear-gradient(135deg,#43a047,#a5d6a7)';
+        el.className='team-card';
+        el.innerHTML=`${ab}<div class="team-avatar" style="background:${col}">${item.img?`<img src="${esc(item.img)}" alt="${esc(item.name)}">`:`${init}`}</div><div class="team-name">${esc(item.name)}</div><div class="team-role">${esc(item.role)}</div><span class="team-role-badge badge-${item.kind||'student'}">${item.kind==='teacher'?'Öğretmen':'Öğrenci'}</span>`;
+        break;
+    }
+    grid.insertBefore(el,add||null);
+  });
+}
+
+window._del=async(sec,key)=>{
+  if(!confirm('Bu içeriği silmek istiyor musun?'))return;
+  await remove(ref(db,`content/${sec}/${key}`));
+  showToast('Silindi.');
+};
+
+/* ── Edit: fetch item then open pre-filled modal ─── */
+window._edit=async(sec,key)=>{
+  const snap=await get(ref(db,`content/${sec}/${key}`));
+  if(!snap.exists())return;
+  const item=snap.val();
+  window._editSec=sec;
+  window._editKey=key;
+  openEditModal(sec,item);
+};
+
+window._editAlbum=async(key)=>{
+  const snap=await get(ref(db,`albums/${key}`));
+  if(!snap.exists())return;
+  const item=snap.val();
+  window._editSec='album';
+  window._editKey=key;
+  openEditModal('album',item);
+};
+
+window._editPhoto=async(albumKey,photoKey)=>{
+  const snap=await get(ref(db,`albums/${albumKey}/photos/${photoKey}`));
+  if(!snap.exists())return;
+  const item=snap.val();
+  window._editSec='photo';
+  window._editKey=photoKey;
+  window._editAlbumKey=albumKey;
+  openEditModal('photo',item);
+};
+
+/* ── Update (overwrite) in Firebase ─────────────── */
+window._updateItem=async(sec,key,data)=>{
+  if(sec==='album'){
+    await set(ref(db,`albums/${key}`),{...data,ts:Date.now()});
+  }else if(sec==='photo'){
+    await set(ref(db,`albums/${window._editAlbumKey}/photos/${key}`),{...data,ts:Date.now()});
+  }else{
+    await set(ref(db,`content/${sec}/${key}`),{...data,ts:Date.now()});
+  }
+  showToast('Değişiklikler kaydedildi ✓');
+  document.getElementById('contentModal').classList.remove('open');
+  window._editSec=null;window._editKey=null;window._editAlbumKey=null;
+};
+</script>
+
+<!-- ═══════════════════════════════════════════════════
+     NON-MODULE JS
+════════════════════════════════════════════════════ -->
+<script>
+/* Bubbles */
+(function(){
+  const c=document.getElementById('bubbles');
+  if(!c)return;
+  for(let i=0;i<22;i++){
+    const b=document.createElement('div');b.className='bubble';
+    const s=16+Math.random()*90;
+    b.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;bottom:${-s}px;animation-duration:${9+Math.random()*16}s;animation-delay:${Math.random()*14}s`;
+    c.appendChild(b);
+  }
+})();
+
+/* Logo bar — hide while visitor is on the landing section */
+(function(){
+  const bar = document.getElementById('logoBar');
+  const landing = document.getElementById('ana-sayfa');
+  if(!bar||!landing) return;
+  const obs = new IntersectionObserver(entries=>{
+    bar.classList.toggle('hidden', entries[0].isIntersecting);
+  },{threshold:0.1});
+  obs.observe(landing);
+})();
+
+/* Nav scroll & active link */
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  document.getElementById('mainNav').classList.toggle('scrolled',y>50);
+  document.getElementById('backToTop').classList.toggle('visible',y>400);
+  let cur='';
+  sections.forEach(s=>{if(y>=s.offsetTop-100)cur=s.id;});
+  navLinks.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+cur)});
+});
+
+/* Back to top */
+document.getElementById('backToTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+/* Hamburger */
+document.getElementById('hamburger').addEventListener('click',()=>document.getElementById('mobileMenu').classList.toggle('open'));
+function closeMobile(){document.getElementById('mobileMenu').classList.remove('open')}
+
+/* Login modal */
+document.getElementById('loginBtn').addEventListener('click',()=>document.getElementById('loginModal').classList.add('open'));
+document.getElementById('closeLoginBtn').addEventListener('click',()=>{document.getElementById('loginModal').classList.remove('open');document.getElementById('loginError').textContent='';});
+document.getElementById('loginModal').addEventListener('click',e=>{if(e.target===document.getElementById('loginModal')){document.getElementById('loginModal').classList.remove('open');document.getElementById('loginError').textContent='';}});
+
+/* Content modal forms */
+const modalForms={
+  album:{
+    title:'Yeni Albüm Oluştur',
+    html:`<div class="form-group"><label>Albüm Adı</label><input id="f1" placeholder="Örn. Sahil Temizliği Etkinliği"></div>
+    <div class="form-group"><label>Tarih</label><input type="date" id="f2"></div>
+    <div class="form-group"><label>Açıklama (isteğe bağlı)</label><textarea id="f3" placeholder="Etkinlik hakkında kısa bir açıklama..."></textarea></div>`,
+    getData:()=>({name:gv('f1'),date:gv('f2'),desc:gv('f3')})
+  },
+  photo:{
+    title:'Fotoğraf Ekle',
+    html:`<div class="form-group"><label>Başlık / Açıklama</label><input id="f1" placeholder="Fotoğraf açıklaması"></div>
+    <div class="form-group"><label>Görsel URL</label><input id="f3" placeholder="https://..."></div>
+    <p class="form-hint">📌 Google Drive: Paylaş → Bağlantıyı kopyala, ardından URL'yi <code>drive.google.com/uc?id=FILE_ID</code> formatına çevir</p>`,
+    getData:()=>({title:gv('f1'),url:gv('f3')})
+  },
+  videos:{
+    title:'Video Ekle',
+    html:`<div class="form-group"><label>Başlık</label><input id="f1" placeholder="Video adı"></div>
+    <div class="form-group"><label>Açıklama</label><input id="f2" placeholder="Kısa açıklama"></div>
+    <div class="form-group"><label>YouTube Video Linki</label><input id="f3" placeholder="https://www.youtube.com/watch?v=..."></div>
+    <p class="form-hint">📌 YouTube'daki herhangi bir link formatı çalışır — watch, embed veya youtu.be</p>`,
+    getData:()=>({title:gv('f1'),sub:gv('f2'),embed:gv('f3')})
+  },
+  podcasts:{
+    title:'Podcast Ekle',
+    html:`<div class="form-group"><label>Bölüm Adı</label><input id="f1" placeholder="Bölüm başlığı"></div>
+    <div class="form-group"><label>Açıklama</label><textarea id="f2" placeholder="Kısa açıklama"></textarea></div>
+    <div class="form-group"><label>Spotify / Anchor Embed HTML</label><textarea id="f3" placeholder='&lt;iframe src="https://open.spotify.com/embed/..."&gt;&lt;/iframe&gt;'></textarea></div>
+    <p class="form-hint">📌 Spotify → ··· → Paylaş → Kodu Göm → tüm iframe'i yapıştır</p>`,
+    getData:()=>({title:gv('f1'),desc:gv('f2'),embed:gv('f3')})
+  },
+  presentations:{
+    title:'Sunum Ekle',
+    html:`<div class="form-group"><label>Sunum Başlığı</label><input id="f1" placeholder="Sunum adı"></div>
+    <div class="form-group"><label>Açıklama</label><input id="f2" placeholder="Kısa açıklama"></div>
+    <div class="form-group"><label>Canva / Google Slides Embed URL</label><input id="f3" placeholder="https://www.canva.com/design/.../view?embed"></div>
+    <p class="form-hint">📌 Canva → Paylaş → Göm → <code>src="..."</code> kısmını kopyala</p>`,
+    getData:()=>({title:gv('f1'),sub:gv('f2'),embed:gv('f3')})
+  },
+  works:{
+    title:'Öğrenci Çalışması Ekle',
+    html:`<div class="form-group"><label>Çalışma Başlığı</label><input id="f1" placeholder="Çalışmanın adı"></div>
+    <div class="form-group"><label>Hazırlayan Öğrenci</label><input id="f2" placeholder="Öğrenci adı"></div>
+    <div class="form-group"><label>Tür</label><select id="f3"><option>Araştırma</option><option>Poster</option><option>Proje</option><option>Rapor</option><option>Sunum</option><option>Diğer</option></select></div>
+    <div class="form-group"><label>Bağlantı URL (isteğe bağlı)</label><input id="f4" placeholder="https://..."></div>`,
+    getData:()=>({title:gv('f1'),author:gv('f2'),type:gv('f3'),url:gv('f4')})
+  },
+  news:{
+    title:'Haber / Duyuru Ekle',
+    html:`<div class="form-group"><label>Başlık</label><input id="f1" placeholder="Haber başlığı"></div>
+    <div class="form-group"><label>Tarih</label><input type="date" id="f2"></div>
+    <div class="form-group"><label>İçerik</label><textarea id="f3" placeholder="Haber içeriği veya özeti..."></textarea></div>
+    <div class="form-group"><label>Emoji Simge</label><input id="f4" placeholder="🌊" maxlength="2" style="width:80px"></div>`,
+    getData:()=>({title:gv('f1'),date:gv('f2'),content:gv('f3'),emoji:gv('f4')||'📰'})
+  },
+  team:{
+    title:'Ekip Üyesi Ekle',
+    html:`<div class="form-group"><label>Ad Soyad</label><input id="f1" placeholder="Üye adı"></div>
+    <div class="form-group"><label>Rol / Grup</label><input id="f2" placeholder="Örn. Araştırma Grubu"></div>
+    <div class="form-group"><label>Tür</label><select id="f3"><option value="student">Öğrenci</option><option value="teacher">Öğretmen</option></select></div>
+    <div class="form-group"><label>Fotoğraf URL (isteğe bağlı)</label><input id="f4" placeholder="https://..."></div>`,
+    getData:()=>({name:gv('f1'),role:gv('f2'),kind:gv('f3'),img:gv('f4')})
+  }
+};
+
+let _curSec=null;
+function gv(id){const e=document.getElementById(id);return e?e.value.trim():''}
+function sv(id,val){const e=document.getElementById(id);if(e)e.value=val||''}
+
+function openModal(sec){
+  _curSec=sec;
+  window._editSec=null;window._editKey=null;
+  const cfg=modalForms[sec];
+  if(!cfg)return;
+  document.getElementById('modalTitle').textContent=cfg.title;
+  document.getElementById('modalBody').innerHTML=cfg.html+`<button class="btn-save" id="saveBtn">Kaydet</button>`;
+  document.getElementById('saveBtn').addEventListener('click',()=>{
+    if(window._saveItem)window._saveItem(_curSec,cfg.getData());
+  });
+  document.getElementById('contentModal').classList.add('open');
+}
+window.openModal=openModal;
+
+/* Pre-fill modal with existing data for editing */
+function openEditModal(sec,item){
+  const cfg=modalForms[sec];
+  if(!cfg)return;
+  document.getElementById('modalTitle').innerHTML=`<span style="font-size:.65em;letter-spacing:.1em;text-transform:uppercase;color:var(--ocean);display:block;margin-bottom:4px">Düzenleniyor</span>${cfg.title.replace('Ekle','').replace('Oluştur','').trim()}`;
+  document.getElementById('modalBody').innerHTML=cfg.html+`<button class="btn-save" id="saveBtn" style="background:linear-gradient(135deg,#2e7d32,#43a047)">Değişiklikleri Kaydet</button>`;
+
+  // Pre-fill fields based on section
+  const fill={
+    album:  ()=>{sv('f1',item.name);sv('f2',item.date);sv('f3',item.desc)},
+    photo:  ()=>{sv('f1',item.title);sv('f3',item.url)},
+    videos: ()=>{sv('f1',item.title);sv('f2',item.sub);sv('f3',item.embed)},
+    podcasts:()=>{sv('f1',item.title);sv('f2',item.desc);sv('f3',item.embed)},
+    presentations:()=>{sv('f1',item.title);sv('f2',item.sub);sv('f3',item.embed)},
+    works:  ()=>{sv('f1',item.title);sv('f2',item.author);sv('f3',item.type);sv('f4',item.url)},
+    news:   ()=>{sv('f1',item.title);sv('f2',item.date);sv('f3',item.content);sv('f4',item.emoji)},
+    team:   ()=>{sv('f1',item.name);sv('f2',item.role);sv('f3',item.kind);sv('f4',item.img)}
+  };
+  if(fill[sec])fill[sec]();
+
+  // For select elements, set selected value
+  ['f3','f4'].forEach(fid=>{
+    const el=document.getElementById(fid);
+    if(el&&el.tagName==='SELECT'){
+      const val=sec==='works'?(fid==='f3'?item.type:''):(sec==='team'?item.kind:'');
+      if(val)[...el.options].forEach(o=>{o.selected=o.value===val||o.text===val});
+    }
+  });
+
+  document.getElementById('saveBtn').addEventListener('click',()=>{
+    if(window._updateItem)window._updateItem(window._editSec,window._editKey,cfg.getData());
+  });
+  document.getElementById('contentModal').classList.add('open');
+}
+window.openEditModal=openEditModal;
+
+document.getElementById('closeModalBtn').addEventListener('click',()=>document.getElementById('contentModal').classList.remove('open'));
+document.getElementById('contentModal').addEventListener('click',e=>{if(e.target===document.getElementById('contentModal'))document.getElementById('contentModal').classList.remove('open');});
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+window.showToast=showToast;
+
+/* ── Doc Viewer ───────────────────────────────────── */
+function openDocViewer(url, title){
+  // Convert Google Drive share links → embedded preview URL
+  let embedUrl = url;
+  const driveMatch = url.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/\w+\/d\/)([A-Za-z0-9_-]+)/);
+  if(driveMatch){
+    embedUrl = `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+  }
+  // Google Docs / Sheets / Slides edit links → preview
+  const docsMatch = url.match(/docs\.google\.com\/(document|spreadsheets|presentation)\/d\/([A-Za-z0-9_-]+)/);
+  if(docsMatch){
+    const typeMap={document:'document',spreadsheets:'spreadsheets',presentation:'presentation'};
+    embedUrl = `https://docs.google.com/${typeMap[docsMatch[1]]}/d/${docsMatch[2]}/preview`;
+  }
+
+  document.getElementById('docViewerTitle').textContent = title || 'Belge';
+  document.getElementById('docViewerOpenBtn').href = url;
+  document.getElementById('docViewerFrame').src = '';
+  document.getElementById('docViewerLoading').style.display = 'flex';
+  document.getElementById('docViewerFrame').src = embedUrl;
+  document.getElementById('docViewerOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+window.openDocViewer = openDocViewer;
+
+function closeDocViewer(){
+  document.getElementById('docViewerOverlay').classList.remove('open');
+  document.getElementById('docViewerFrame').src = '';
+  document.body.style.overflow = '';
+}
+document.getElementById('docViewerClose').addEventListener('click', closeDocViewer);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDocViewer(); });
+/* ── SCROLL REVEAL (Akıcı Animasyonlar) ──────────────── */
+// Animasyon eklenecek hedeflerin sınıf isimleri
+const revealClasses = [
+  '.section-header', '.about-text', '.about-visual', 
+  '.album-card', '.media-card', '.podcast-card', 
+  '.work-card', '.news-card', '.team-card'
+];
+
+// Ekrana girdiğini anlayan IntersectionObserver
+const revealOptions = { root: null, rootMargin: "0px 0px -15% 0px", threshold: 0 };
+const revealObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('active');
+      observer.unobserve(entry.target); // Sadece bir kere çalışması (tekrar tekrar kaymasın) için
+    }
+  });
+}, revealOptions);
+
+// 1. Sayfa ilk açıldığında var olan hedefleri dinlemeye başla
+document.querySelectorAll(revealClasses.join(', ')).forEach(el => {
+  el.classList.add('reveal');
+  revealObserver.observe(el);
+});
+
+// 2. Firebase'den sonradan gelen kartları otomatik yakalayan MutationObserver
+const mutationObserver = new MutationObserver(mutations => {
+  mutations.forEach(mutation => {
+    mutation.addedNodes.forEach(node => {
+      if(node.nodeType === 1) { // Eğer HTML elementi ise
+        if(node.matches && node.matches(revealClasses.join(', '))) {
+          node.classList.add('reveal');
+          revealObserver.observe(node);
+        }
+        const children = node.querySelectorAll(revealClasses.join(', '));
+        children.forEach(child => {
+          child.classList.add('reveal');
+          revealObserver.observe(child);
+        });
+      }
+    });
+  });
+});
+
+// Tüm HTML yapısını dinamik içerikler için izlemeye al
+mutationObserver.observe(document.body, { childList: true, subtree: true });
+/* ── DİNAMİK VERİ SAYACI (Animated Counters) ──────────────── */
+const counters = document.querySelectorAll('.stat-number');
+const animationSpeed = 40; // Sayma hızı (Rakam küçüldükçe animasyon hızlanır)
+
+// Rakamların olduğu bölüm ekrana girdiğinde çalışacak gözlemci
+const counterObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const counter = entry.target;
+      
+      const updateCount = () => {
+        // HTML'de yazdığımız hedef rakamı alıyoruz
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+        
+        // Her adımda eklenecek artış miktarı
+        const increment = target / animationSpeed;
+
+        if (count < target) {
+          counter.innerText = Math.ceil(count + increment);
+          setTimeout(updateCount, 30); // 30 milisaniyede bir tekrarla
+        } else {
+          // Hedefe ulaşıldığında sayıyı sabitle (isteğe bağlı '+' eklenebilir)
+          counter.innerText = target; 
+          if(counter.id === 'stat-students' || counter.id === 'stat-works') {
+            counter.innerText = target + '+'; 
+          }
+        }
+      };
+      
+      updateCount();
+      observer.unobserve(counter); // Animasyonun sadece bir kez çalışması için takibi bırak
+    }
+  });
+}, { threshold: 0.5 }); // Kartın yarısı ekrana girdiğinde tetikle
+
+// Tüm sayıcıları gözlemlemeye başla
+counters.forEach(counter => {
+  counterObserver.observe(counter);
+});
+</script>
+</body>
+</html>
