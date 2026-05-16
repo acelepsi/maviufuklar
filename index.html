@@ -1015,6 +1015,10 @@ body { padding-bottom: 58px; }
      FIREBASE MODULE
 ════════════════════════════════════════════════════ -->
 <script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getDatabase,ref,push,set,onValue,remove,get}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
 // ════════════════════════════════════════════════════
 //  ★ FIREBASE CONFIG — kendi değerlerinle değiştir
 // ════════════════════════════════════════════════════
@@ -1029,14 +1033,18 @@ const firebaseConfig = {
 };
 // ════════════════════════════════════════════════════
 
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import{getDatabase,ref,push,set,onValue,remove,get}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
 if(firebaseConfig.apiKey==="BURAYA_API_KEY")document.getElementById('setupBanner').style.display='block';
 
 let app,auth,db;
-try{app=initializeApp(firebaseConfig);auth=getAuth(app);db=getDatabase(app);}catch(e){console.warn('Firebase:',e)}
+try{
+  app=initializeApp(firebaseConfig);
+  auth=getAuth(app);
+  db=getDatabase(app);
+}catch(e){
+  console.error('Firebase init failed:',e);
+  document.getElementById('setupBanner').style.display='block';
+  document.getElementById('setupBanner').textContent='⚠️ Firebase bağlantısı kurulamadı: '+e.message;
+}
 
 /* ── Auth ─────────────────────────────────────────── */
 if(auth){
@@ -1141,7 +1149,6 @@ function renderAlbums(data){
 
 window._curAlbumKey=null;
 window._curAlbumPhotos=[];
-let lightboxIdx=0;
 
 function openAlbum(key,album){
   window._curAlbumKey=key;
