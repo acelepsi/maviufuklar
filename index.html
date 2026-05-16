@@ -303,7 +303,7 @@ section{padding:90px 5%}
 .photo-thumb:hover img{transform:scale(1.06)}
 .photo-del{display:none;position:absolute;top:7px;right:7px;z-index:5;background:var(--danger);color:white;border:none;border-radius:50%;width:24px;height:24px;font-size:.72rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.25)}
 .photo-del:hover{transform:scale(1.1)}
-.photo-thumb:hover .photo-del{display:flex}
+.is-admin .photo-thumb:hover .photo-del{display:flex}
 
 /* Both views share this for admin add-slot */
 .album-grid .add-slot{min-height:220px}
@@ -1057,9 +1057,12 @@ if(auth){
 }
 
 function setAdminUI(on){
-  document.querySelectorAll('.add-slot').forEach(el=>el.style.display=on?'flex':'none');
-  document.querySelectorAll('.del-btn').forEach(el=>el.style.display=on?'flex':'none');
-  // album detail action bar
+  const v=on?'flex':'none';
+  document.body.classList.toggle('is-admin',on);
+  document.querySelectorAll('.add-slot').forEach(el=>el.style.display=v);
+  document.querySelectorAll('.del-btn').forEach(el=>el.style.display=v);
+  document.querySelectorAll('.edit-btn').forEach(el=>el.style.display=v);
+  document.querySelectorAll('.photo-del').forEach(el=>el.style.display=v);
   const ab=document.getElementById('addPhotoBtn');
   const db2=document.getElementById('deleteAlbumBtn');
   if(ab)ab.style.display=on&&window._curAlbumKey?'flex':'none';
@@ -1115,8 +1118,8 @@ function renderAlbums(data){
       if(photoCount>4)coverHtml+=`<div class="album-more-badge">+${photoCount-4}</div>`;
     }
 
-    const delB=window._isAdmin()?`<button class="del-btn" style="display:flex" onclick="event.stopPropagation();window._delAlbum('${key}')">✕</button>`:'';
-    const editB=window._isAdmin()?`<button class="edit-btn" style="display:flex" onclick="event.stopPropagation();window._editAlbum('${key}')">✎</button>`:'';
+    const delB=`<button class="del-btn" onclick="event.stopPropagation();window._delAlbum('${key}')">✕</button>`;
+    const editB=`<button class="edit-btn" onclick="event.stopPropagation();window._editAlbum('${key}')">✎</button>`;
 
     const card=document.createElement('div');
     card.className='album-card';
@@ -1182,8 +1185,8 @@ function renderPhotos(albumKey,data){
     window._curAlbumPhotos.push({key:pKey,url:photo.url,title:photo.title||''});
     const thumb=document.createElement('div');
     thumb.className='photo-thumb';
-    const delB=window._isAdmin()?`<button class="photo-del" onclick="event.stopPropagation();window._delPhoto('${albumKey}','${pKey}')">✕</button>`:'';
-    const edtB=window._isAdmin()?`<button class="photo-del" style="right:36px;background:var(--ocean)" onclick="event.stopPropagation();window._editPhoto('${albumKey}','${pKey}')">✎</button>`:'';
+    const delB=`<button class="photo-del" onclick="event.stopPropagation();window._delPhoto('${albumKey}','${pKey}')">✕</button>`;
+    const edtB=`<button class="photo-del" style="right:36px;background:var(--ocean)" onclick="event.stopPropagation();window._editPhoto('${albumKey}','${pKey}')">✎</button>`;
     thumb.innerHTML=`${edtB}${delB}<img src="${esc(photo.url||'')}" alt="${esc(photo.title||'')}">`;
     thumb.addEventListener('click',()=>{
       const idx=window._curAlbumPhotos.findIndex(p=>p.key===pKey);
@@ -1358,9 +1361,10 @@ const addMap={videos:'addVideo',podcasts:'addPodcast',presentations:'addPresenta
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
 function adminBtns(sec,key){
-  if(!window._isAdmin())return'';
-  return `<button class="edit-btn" style="display:flex" title="Düzenle" onclick="window._edit('${sec}','${key}')">✎</button>
-          <button class="del-btn"  style="display:flex" title="Sil"     onclick="window._del('${sec}','${key}')">✕</button>`;
+  // Always render buttons; CSS keeps them display:none by default.
+  // setAdminUI() will flip them to flex if admin is logged in.
+  return `<button class="edit-btn" title="Düzenle" onclick="window._edit('${sec}','${key}')">✎</button>
+          <button class="del-btn"  title="Sil"     onclick="window._del('${sec}','${key}')">✕</button>`;
 }
 
 function renderSection(sec,data){
