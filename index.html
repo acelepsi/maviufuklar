@@ -598,7 +598,7 @@ body { padding-bottom: 58px; }
 <!-- NAV -->
 <nav id="mainNav">
   <a href="#" class="nav-brand">
-    <div class="nav-icon" style="background:none;box-shadow:none;overflow:hidden;border-radius:8px"><img src="https://i.postimg.cc/dVMD0JxJ/10444e8f-9216-4689-87bc-42014ad86f86.png" alt="Mavi Ufuklar" style="width:100%;height:100%;object-fit:contain"></div>
+    <div class="nav-icon" style="background:none;box-shadow:none;overflow:hidden;border-radius:8px"><img src="https://i.ibb.co/Xx8t7fwF/10444e8f-9216-4689-87bc-42014ad86f86.png" alt="Mavi Ufuklar" style="width:100%;height:100%;object-fit:contain"></div>
     <div class="nav-logo-wrap">
       <span class="nav-super">Erdemli Nesiller</span>
       <span class="nav-title">Mavi Ufuklar</span>
@@ -639,11 +639,11 @@ body { padding-bottom: 58px; }
     <!-- Organisation links -->
     <div class="landing-orgs">
       <a href="https://kirklareli.meb.gov.tr/" target="_blank" rel="noopener" class="org-badge">
-        <img src="https://i.postimg.cc/T3vQZRSW/8e9a782b-e2e8-4f5c-8189-e1d04cf072db.jpg" alt="Kırklareli MEM">
+        <img src="https://i.ibb.co/CdYBc9Y/8e9a782b-e2e8-4f5c-8189-e1d04cf072db.jpg" alt="Kırklareli MEM">
         Kırklareli İl Milli Eğitim Müdürlüğü
       </a>
       <a href="https://luleburgazataturkanadolulisesi.meb.k12.tr/" target="_blank" rel="noopener" class="org-badge">
-        <img src="https://i.postimg.cc/C5HH08X2/468333348-10161734184389210-6024325993737174782-n.jpg" alt="Lüleburgaz Atatürk AL">
+        <img src="https://i.ibb.co/qYYHrVtX/468333348-10161734184389210-6024325993737174782-n.jpg" alt="Lüleburgaz Atatürk AL">
         Lüleburgaz Atatürk Anadolu Lisesi
       </a>
     </div>
@@ -910,28 +910,28 @@ body { padding-bottom: 58px; }
 <div class="logo-bar" id="logoBar">
   <div class="logo-bar-inner">
     <a href="https://kirklareli.meb.gov.tr/" target="_blank" rel="noopener" class="logo-bar-item" title="Kırklareli İl Milli Eğitim Müdürlüğü">
-      <img src="https://i.postimg.cc/T3vQZRSW/8e9a782b-e2e8-4f5c-8189-e1d04cf072db.jpg" alt="Kırklareli MEM">
+      <img src="https://i.ibb.co/CdYBc9Y/8e9a782b-e2e8-4f5c-8189-e1d04cf072db.jpg" alt="Kırklareli MEM">
       <div class="logo-bar-label">
         Kırklareli MEM
         <span class="logo-bar-sublabel">İl Milli Eğitim Müdürlüğü</span>
       </div>
     </a>
     <a href="https://luleburgazataturkanadolulisesi.meb.k12.tr/" target="_blank" rel="noopener" class="logo-bar-item" title="Lüleburgaz Atatürk Anadolu Lisesi">
-      <img src="https://i.postimg.cc/C5HH08X2/468333348-10161734184389210-6024325993737174782-n.jpg" alt="Lüleburgaz Atatürk AL">
+      <img src="https://i.ibb.co/qYYHrVtX/468333348-10161734184389210-6024325993737174782-n.jpg" alt="Lüleburgaz Atatürk AL">
       <div class="logo-bar-label">
         Atatürk Anadolu Lisesi
         <span class="logo-bar-sublabel">Lüleburgaz</span>
       </div>
     </a>
     <div class="logo-bar-item" style="cursor:default">
-      <img src="https://i.postimg.cc/nhM7RNV8/0b919696-f942-4271-bddb-de74dd1d2935.jpg" alt="Erdemli Nesiller">
+      <img src="https://i.ibb.co/5WJVPQJv/0b919696-f942-4271-bddb-de74dd1d2935.jpg" alt="Erdemli Nesiller">
       <div class="logo-bar-label">
         Erdemli Nesiller
         <span class="logo-bar-sublabel">Sosyal Sorumluluk Projesi</span>
       </div>
     </div>
     <div class="logo-bar-item" style="cursor:default">
-      <img src="https://i.postimg.cc/dVMD0JxJ/10444e8f-9216-4689-87bc-42014ad86f86.png" alt="Mavi Ufuklar">
+      <img src="https://i.ibb.co/Xx8t7fwF/10444e8f-9216-4689-87bc-42014ad86f86.png" alt="Mavi Ufuklar">
       <div class="logo-bar-label">
         Mavi Ufuklar
         <span class="logo-bar-sublabel">Okyanus Okuryazarlığı</span>
@@ -1136,6 +1136,10 @@ function openAlbum(key,album){
   document.getElementById('galleryDesc').textContent=album.desc||'';
   document.getElementById('detailAlbumName').textContent=album.name||'';
   document.getElementById('detailAlbumDate').textContent=album.date||'';
+  // Prevent layout-reflow scroll jump — anchor to gallery section top
+  const galeri=document.getElementById('galeri');
+  const navH=(document.getElementById('adminBar').style.display==='flex'?40:0)+66;
+  window.scrollTo({top:galeri.offsetTop-navH,behavior:'instant'});
 
   // live listen to photos
   onValue(ref(db,`albums/${key}/photos`),snap=>{
@@ -1186,6 +1190,10 @@ document.getElementById('backToAlbums').addEventListener('click',()=>{
   document.getElementById('deleteAlbumBtn').style.display='none';
   document.getElementById('galleryTitle').textContent='Faaliyet Albümleri';
   document.getElementById('galleryDesc').textContent='Her faaliyetin fotoğrafları kendi albümünde toplanmıştır. Bir albüme tıklayın.';
+  // Re-anchor to gallery section after grid is restored
+  const galeri=document.getElementById('galeri');
+  const navH=(document.getElementById('adminBar').style.display==='flex'?40:0)+66;
+  window.scrollTo({top:galeri.offsetTop-navH,behavior:'instant'});
 });
 
 /* Lightbox with nav */
