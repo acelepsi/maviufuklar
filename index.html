@@ -1590,21 +1590,9 @@ window._saveItem=async(type,data)=>{
 };
 
 /* ── Other sections render ────────────────────────── */
-const gridMap = {
-  photos:'galleryGrid', videos:'videoGrid', podcasts:'podcastList',
-  presentations:'presentationGrid', works:'worksGrid', news:'newsGrid', team:'teamGrid',
-  timeline:'timelineContainer' // <-- EKLEDİK
-};
-const emptyMap = {
-  photos:'emptyPhotos', videos:'emptyVideos', podcasts:'emptyPodcasts',
-  presentations:'emptyPresentations', works:'emptyWorks', news:'emptyNews', team:'emptyTeam',
-  timeline:'emptyTimeline' // <-- EKLEDİK
-};
-const addMap = {
-  photos:'addPhoto', videos:'addVideo', podcasts:'addPodcast',
-  presentations:'addPresentation', works:'addWork', news:'addNews', team:'addTeam',
-  timeline:'addTimeline' // <-- EKLEDİK
-};
+const gridMap={videos:'videoGrid',podcasts:'podcastList',presentations:'presentationGrid',works:'worksGrid',news:'newsGrid',team:'teamGrid',timeline:'timelineContainer'};
+const emptyMap={videos:'emptyVideos',podcasts:'emptyPodcasts',presentations:'emptyPresentations',works:'emptyWorks',news:'emptyNews',team:'emptyTeam',timeline:'emptyTimeline'};
+const addMap={videos:'addVideo',podcasts:'addPodcast',presentations:'addPresentation',works:'addWork',news:'addNews',team:'addTeam',timeline:'addTimeline'};
 
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
@@ -1693,11 +1681,10 @@ case'works':
         el.className='team-card';
         el.innerHTML=`${ab}<div class="team-avatar" style="background:${col}">${item.img?`<img src="${esc(item.img)}" alt="${esc(item.name)}">`:`${init}`}</div><div class="team-name">${esc(item.name)}</div><div class="team-role">${esc(item.role)}</div><span class="team-role-badge badge-${item.kind||'student'}">${item.kind==='teacher'?'Öğretmen':'Öğrenci'}</span>`;
         break;
-      case 'timeline':
-        // İndekse göre bir sol, bir sağ olacak şekilde sınıf atıyoruz
+       case 'timeline':
         const side = idx % 2 === 0 ? 'left' : 'right';
         el.className = `timeline-item ${side}`;
-        el.innerHTML = `${delBtn(sec,key)}
+        el.innerHTML = `${ab}
           <div class="timeline-dot"></div>
           <div class="timeline-content">
             <div class="timeline-date">${esc(item.date)}</div>
