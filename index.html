@@ -655,10 +655,6 @@ footer{background:var(--deep);color:rgba(255,255,255,.6);padding:60px 5% 40px}
   .back-to-top{bottom:20px;right:20px;width:40px;height:40px}
   .landing-subproject{flex-direction:column}
   .landing-subproject-left{border-right:none;border-bottom:1px solid rgba(174,214,241,.2);padding-bottom:14px}
-  .logo-bar-sublabel{display:none}
-  .logo-bar-item{padding:0 12px;gap:7px}
-  .logo-bar-item img{width:24px;height:24px}
-  .logo-bar-label{font-size:.6rem}
 }
 /* ═══════════════════════════════════════════
    HERO PHOTO SLIDESHOW
@@ -699,61 +695,25 @@ footer{background:var(--deep);color:rgba(255,255,255,.6);padding:60px 5% 40px}
   width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.3);
   transition:background .4s,transform .4s;cursor:pointer;
 }
-.slide-dot.active{background:rgba(255,255,255,.85);transform:scale(1.4)}
-═══════════════════════════════════════════ */
-.logo-bar {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 1200;
-  background: rgba(7,22,41,.72);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border-top: 1px solid rgba(93,173,226,.15);
-  padding: 0 5%; height: 58px;
-  display: flex; align-items: center;
-  transition: opacity .4s ease, transform .4s ease;
-}
-.logo-bar.hidden { opacity: 0; transform: translateY(100%); pointer-events: none; }
-.logo-bar-inner {
-  max-width: 1200px; margin: 0 auto; width: 100%;
-  display: flex; align-items: center; justify-content: center; gap: 0;
-}
-.logo-bar-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 0 22px; text-decoration: none;
-  border-right: 1px solid rgba(174,214,241,.1);
-  transition: opacity var(--transition);
-  opacity: .6;
-}
-.logo-bar-item:last-child { border-right: none; }
-.logo-bar-item:hover { opacity: 1; }
-.logo-bar-item img {
-  height: 30px; width: 30px; object-fit: contain;
-  filter: brightness(1) saturate(.6);
-  transition: filter var(--transition);
-  border-radius: 5px;
-}
-.logo-bar-item:hover img { filter: brightness(1.1) saturate(1); }
-.logo-bar-label {
-  font-size: .67rem; font-weight: 500; letter-spacing: .05em;
-  color: rgba(255,255,255,.65); white-space: nowrap; line-height: 1.3;
-  transition: color var(--transition);
-}
-.logo-bar-item:hover .logo-bar-label { color: rgba(255,255,255,.9); }
-.logo-bar-sublabel {
-  font-size: .58rem; color: rgba(255,255,255,.35); letter-spacing: .03em; display: block;
+.slide-dot.active { 
+  background: rgba(255,255,255,.85); 
+  transform: scale(1.4); 
 }
 
-/* Give page room for the bar */
-body { padding-bottom: 58px; }
 /* ═══════════════════════════════════════════
    DOC VIEWER MODAL
 ═══════════════════════════════════════════ */
-.docviewer-overlay{
-  display:none;position:fixed;inset:0;z-index:6000;
-  background:rgba(7,22,41,.92);backdrop-filter:blur(10px);
-  flex-direction:column;align-items:stretch;
-  animation:fadeIn .2s ease;
+.docviewer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 6000;
+  background: rgba(7, 22, 41, 0.92);
+  backdrop-filter: blur(10px);
+  flex-direction: column;
+  align-items: stretch;
 }
-.docviewer-overlay.open{display:flex}
+.docviewer-overlay.open{display:flex;animation:fadeIn .2s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .docviewer-toolbar{
   display:flex;align-items:center;justify-content:space-between;
@@ -794,6 +754,62 @@ body { padding-bottom: 58px; }
   animation:spin .8s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
+/* ═══════════════════════════════════════════
+   ERDEMLI NESILLER LOCKUP
+═══════════════════════════════════════════ */
+.en-lockup{
+  display:flex;flex-direction:column;align-items:center;
+  margin-bottom:36px;
+}
+.en-logos{
+  display:flex;align-items:center;gap:0;margin-bottom:24px;
+}
+.en-logo-img{
+  border-radius:50%;object-fit:contain;
+  background:rgba(255,255,255,.95);padding:4px;
+  box-shadow:0 4px 18px rgba(0,0,0,.35);
+  border:2px solid rgba(255,255,255,.4);
+  transition:transform var(--transition),box-shadow var(--transition);
+}
+.en-logo-img:hover{transform:scale(1.1);box-shadow:0 8px 28px rgba(0,0,0,.5)}
+/* MEM — largest, center */
+.en-logo-lg{width:64px;height:64px;}
+/* School + EN — smaller flanking logos */
+.en-logo-sm{width:46px;height:46px;opacity:.85}
+.en-logo-sep{
+  width:28px;height:1px;
+  background:linear-gradient(90deg,rgba(255,255,255,.1),rgba(174,214,241,.3),rgba(255,255,255,.1));
+}
+.en-tag{
+  font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold-light);font-weight:500;opacity:.85;margin-bottom:14px;
+}
+/* Single-line title */
+.en-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.8rem,8vw,6.5rem);
+  font-weight:300;line-height:1;white-space:nowrap;
+  letter-spacing:.02em;margin-bottom:20px;
+  background:linear-gradient(135deg,#fff 35%,var(--gold-light) 55%,#fff 75%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.en-title::after{
+  content:'';display:block;width:60px;height:1px;margin:14px auto 0;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.55),transparent);
+}
+.en-org-links{
+  display:flex;align-items:center;gap:12px;
+}
+.en-org-link{
+  font-size:.72rem;letter-spacing:.05em;color:rgba(255,255,255,.4);
+  text-decoration:none;transition:color var(--transition);
+}
+.en-org-link:hover{color:rgba(255,255,255,.85)}
+.en-org-dot{
+  width:3px;height:3px;border-radius:50%;
+  background:rgba(255,255,255,.22);flex-shrink:0;
+}
 </style>
 </head>
 <body>
@@ -858,29 +874,24 @@ body { padding-bottom: 58px; }
   <div class="landing-bubbles" id="bubbles"></div>
   <div class="landing-content">
 
-    <!-- Organisation links -->
-    <div class="landing-orgs">
-      <a href="https://kirklareli.meb.gov.tr/" target="_blank" rel="noopener" class="org-badge">
-        <img src="https://i.ibb.co/CdYBc9Y/8e9a782b-e2e8-4f5c-8189-e1d04cf072db.jpg" alt="Kırklareli MEM">
-        Kırklareli İl Milli Eğitim Müdürlüğü
-      </a>
-      <a href="https://luleburgazataturkanadolulisesi.meb.k12.tr/" target="_blank" rel="noopener" class="org-badge">
-        <img src="https://i.ibb.co/qYYHrVtX/468333348-10161734184389210-6024325993737174782-n.jpg" alt="Lüleburgaz Atatürk AL">
-        Lüleburgaz Atatürk Anadolu Lisesi
-      </a>
-    </div>
-
     <!-- Primary project — Erdemli Nesiller -->
-    <div class="landing-super">Sosyal Sorumluluk Projesi &nbsp;·&nbsp; 2025–2026</div>
-    <h1 class="landing-title"><strong>Erdemli Nesiller</strong></h1>
-
-    <!-- Separator -->
-    <div class="landing-wave-sep">
-      <div class="landing-wave-label">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
-        bünyesinde
+    <div class="en-lockup">
+      <div class="en-logos">
+        <img src="https://i.ibb.co/qYYHrVtX/468333348-10161734184389210-6024325993737174782-n.jpg" alt="Lüleburgaz Atatürk AL" class="en-logo-img en-logo-sm">
+        <div class="en-logo-sep"></div>
+        <img src="https://i.ibb.co/CdYBc9Y/8e9a782b-e2e8-4f5c-8189-e1d04cf072db.jpg" alt="Kırklareli MEM" class="en-logo-img en-logo-lg">
+        <div class="en-logo-sep"></div>
+        <img src="https://i.ibb.co/5WJVPQJv/0b919696-f942-4271-bddb-de74dd1d2935.jpg" alt="Erdemli Nesiller" class="en-logo-img en-logo-sm">
+      </div>
+      <div class="en-tag">Sosyal Sorumluluk Projesi &nbsp;</div>
+      <h1 class="en-title">Erdemli Nesiller</h1>
+      <div class="en-org-links">
+        <a href="https://kirklareli.meb.gov.tr/" target="_blank" rel="noopener" class="en-org-link">Kırklareli İl MEM ↗</a>
+        <span class="en-org-dot"></span>
+        <a href="https://luleburgazataturkanadolulisesi.meb.k12.tr/" target="_blank" rel="noopener" class="en-org-link">Lüleburgaz Atatürk AL ↗</a>
       </div>
     </div>
+
 
     <!-- Sub-project — Mavi Ufuklar -->
     <div style="display:flex;justify-content:center;margin-bottom:36px">
@@ -891,8 +902,8 @@ body { padding-bottom: 58px; }
         </div>
         <div class="landing-subproject-right">
           <div class="landing-subproject-theme">
-            🌊 Okyanus Okuryazarlığı<br>
-            💧 Su Farkındalığı &amp; Koruma
+             Okyanus Okuryazarlığı<br>
+             Su Farkındalığı &amp; Koruma
           </div>
           <span class="landing-subproject-year">2025 – 2026 Eğitim Yılı</span>
         </div>
@@ -977,7 +988,6 @@ body { padding-bottom: 58px; }
           <li>Yerel su kaynaklarının araştırılması</li>
         </ul>
       </div>
-      <div class="about-badge">Kırklareli MEM Onaylı Proje ✓</div>
     </div>
     
   </div>
@@ -1149,40 +1159,6 @@ body { padding-bottom: 58px; }
     </button>
   </div>
 </section>
-
-<!-- LOGO BAR — elegant sticky footer with real logos -->
-<div class="logo-bar" id="logoBar">
-  <div class="logo-bar-inner">
-    <a href="https://kirklareli.meb.gov.tr/" target="_blank" rel="noopener" class="logo-bar-item" title="Kırklareli İl Milli Eğitim Müdürlüğü">
-      <img src="https://i.ibb.co/CdYBc9Y/8e9a782b-e2e8-4f5c-8189-e1d04cf072db.jpg" alt="Kırklareli MEM">
-      <div class="logo-bar-label">
-        Kırklareli MEM
-        <span class="logo-bar-sublabel">İl Milli Eğitim Müdürlüğü</span>
-      </div>
-    </a>
-    <a href="https://luleburgazataturkanadolulisesi.meb.k12.tr/" target="_blank" rel="noopener" class="logo-bar-item" title="Lüleburgaz Atatürk Anadolu Lisesi">
-      <img src="https://i.ibb.co/qYYHrVtX/468333348-10161734184389210-6024325993737174782-n.jpg" alt="Lüleburgaz Atatürk AL">
-      <div class="logo-bar-label">
-        Atatürk Anadolu Lisesi
-        <span class="logo-bar-sublabel">Lüleburgaz</span>
-      </div>
-    </a>
-    <div class="logo-bar-item" style="cursor:default">
-      <img src="https://i.ibb.co/5WJVPQJv/0b919696-f942-4271-bddb-de74dd1d2935.jpg" alt="Erdemli Nesiller">
-      <div class="logo-bar-label">
-        Erdemli Nesiller
-        <span class="logo-bar-sublabel">Sosyal Sorumluluk Projesi</span>
-      </div>
-    </div>
-    <div class="logo-bar-item" style="cursor:default">
-      <img src="https://i.ibb.co/Xx8t7fwF/10444e8f-9216-4689-87bc-42014ad86f86.png" alt="Mavi Ufuklar">
-      <div class="logo-bar-label">
-        Mavi Ufuklar
-        <span class="logo-bar-sublabel">Okyanus Okuryazarlığı</span>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- BACK TO TOP -->
 <button class="back-to-top" id="backToTop" title="Yukarı çık">
@@ -1902,17 +1878,6 @@ window._shareContent = async (title, text, url) => {
     b.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;bottom:${-s}px;animation-duration:${9+Math.random()*16}s;animation-delay:${Math.random()*14}s`;
     c.appendChild(b);
   }
-})();
-
-/* Logo bar — hide while visitor is on the landing section */
-(function(){
-  const bar = document.getElementById('logoBar');
-  const landing = document.getElementById('ana-sayfa');
-  if(!bar||!landing) return;
-  const obs = new IntersectionObserver(entries=>{
-    bar.classList.toggle('hidden', entries[0].isIntersecting);
-  },{threshold:0.1});
-  obs.observe(landing);
 })();
 
 /* Nav scroll & active link */
